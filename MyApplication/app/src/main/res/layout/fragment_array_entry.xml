@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/holo_green_light"
+    tools:context=".TupleEntryFragment">
+
+    <TextView
+        android:id="@+id/array_type_string"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/enter_length"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/array_type_string" >
+
+        <TextView
+            android:id="@+id/length_label"
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="Array length" />
+
+        <EditText
+            android:id="@+id/length"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Value"
+            android:singleLine="true"
+            android:inputType="textNoSuggestions|number" />
+
+    </LinearLayout>
+
+    <include layout="@layout/argument_row"
+        android:id="@+id/default_element"
+        android:layout_below="@id/enter_length"
+        android:layout_height="50dp"
+        android:layout_width="match_parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/array_recycler_view"
+        android:layout_below="@id/default_element"
+        android:layout_above="@id/return_array"
+        android:background="@android:color/holo_red_light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/return_array"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@android:color/holo_green_dark"
+        android:text="ENTER"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
