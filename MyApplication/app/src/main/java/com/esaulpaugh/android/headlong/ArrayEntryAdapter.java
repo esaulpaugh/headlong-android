@@ -132,10 +132,6 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
         }
     }
 
-//    private void validate(String valString, View valueView) {
-//
-//    }
-
     private void validateTypeable(String valString, EditText typeableValueView) {
         boolean valid = valString != null;
         if(valid) {

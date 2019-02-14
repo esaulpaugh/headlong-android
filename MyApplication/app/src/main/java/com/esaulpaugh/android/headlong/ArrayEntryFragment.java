@@ -224,8 +224,6 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
 
                 Object array = createArray(arrayType, length);
 
-//                Object[] array = createObjectArray(arrayType);
-
                 intent.putExtra(EditorActivity.FOR_DEFAULT_VAL, forDefaultVal);
                 intent.putExtra(ArrayEntryFragment.ARG_ARRAY_TYPE_STRING, arrayTypeString);
 
