@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.StackableType;
 import com.esaulpaugh.headlong.abi.Tuple;
+import com.esaulpaugh.headlong.abi.util.ClassNames;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
         final String canonical = triple.stackableType.getCanonicalType();
 
-        holder.type.setText(canonical);
+        holder.type.setText(canonical + ", " + ClassNames.toFriendly(triple.stackableType.className()));
 
         holder.typeableValue.setText("");
 

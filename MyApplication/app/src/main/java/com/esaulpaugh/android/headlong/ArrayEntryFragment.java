@@ -19,6 +19,7 @@ import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.StackableType;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
+import com.esaulpaugh.headlong.abi.util.ClassNames;
 
 import java.lang.reflect.Array;
 import java.text.ParseException;
@@ -156,7 +157,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         adapter = new ArrayEntryAdapter(getActivity(), elementType, elementCategory, listElements);
         recyclerView.setAdapter(adapter);
 
-        type.setText("Default val, " + elementCanonical);
+        type.setText("Set all, " + elementCanonical + ", " + ClassNames.toFriendly(elementType.className()));
 
         switch (elementCategory) {
         case CATEGORY_TUPLE:
