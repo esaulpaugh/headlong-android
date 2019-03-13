@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.esaulpaugh.headlong.abi.Function;
-import com.esaulpaugh.headlong.abi.StackableType;
+import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
 
@@ -31,11 +31,11 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
 
     static class Triple {
 
-        final StackableType<?> stackableType;
+        final ABIType<?> abiType;
         final Object object;
 
-        Triple(StackableType<?> stackableType, Object object) {
-            this.stackableType = stackableType;
+        Triple(ABIType<?> abiType, Object object) {
+            this.abiType = abiType;
             this.object = object;
         }
     }
@@ -102,8 +102,8 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
             try {
                 TupleType tt = TupleType.parse(subtupleTypeString);
                 listElements.clear();
-                for(StackableType<?> stackableType : tt.getElementTypes()) {
-                    listElements.add(new Triple(stackableType, null));
+                for(ABIType<?> abiType : tt.getElementTypes()) {
+                    listElements.add(new Triple(abiType, null));
                 }
                 adapter.notifyDataSetChanged();
 
@@ -134,8 +134,8 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
 
                         listElements.clear();
 
-                        for(StackableType<?> stackableType : tt.getElementTypes()) {
-                            listElements.add(new Triple(stackableType, null));
+                        for(ABIType<?> abiType : tt.getElementTypes()) {
+                            listElements.add(new Triple(abiType, null));
                         }
 
                         adapter.notifyDataSetChanged();

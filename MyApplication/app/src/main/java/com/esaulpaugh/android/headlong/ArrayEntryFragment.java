@@ -15,8 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
-import com.esaulpaugh.headlong.abi.StackableType;
+import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
 import com.esaulpaugh.headlong.abi.util.ClassNames;
@@ -33,7 +34,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
     private boolean forDefaultVal;
     private String arrayTypeString;
 
-    private StackableType<?> elementType;
+    private ABIType<?> elementType;
 
     private List<Object> listElements;
 
@@ -76,9 +77,9 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_array_entry, container, false);
 
-        final ArrayType<StackableType<?>, ?> arrayType;
+        final ArrayType<ABIType<?>, ?> arrayType;
         try {
-            arrayType = (ArrayType<StackableType<?>, ?>) TupleType.parse("(" + arrayTypeString + ")").getElementTypes()[0];
+            arrayType = (ArrayType<ABIType<?>, ?>) TupleType.parse("(" + arrayTypeString + ")").getElementTypes()[0];
         } catch (ParseException pe) {
             Toast.makeText(getActivity(), pe.getMessage(), Toast.LENGTH_LONG).show();
             return view;
@@ -157,7 +158,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         adapter = new ArrayEntryAdapter(getActivity(), elementType, elementCategory, listElements);
         recyclerView.setAdapter(adapter);
 
-        type.setText("Set all, " + elementCanonical + ", " + ClassNames.toFriendly(elementType.className()));
+        type.setText("Set all, " + elementCanonical + ", " + ClassNames.toFriendly(elementType.clazz().getName()));
 
         switch (elementCategory) {
         case CATEGORY_TUPLE:

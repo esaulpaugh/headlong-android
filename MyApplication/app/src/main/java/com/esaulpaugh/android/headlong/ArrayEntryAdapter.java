@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.esaulpaugh.headlong.abi.StackableType;
+import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.Tuple;
 
 import java.util.List;
@@ -23,14 +23,14 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
 
     private int colorRed, colorGreen;
 
-    private final StackableType<?> elementType;
+    private final ABIType<?> elementType;
     private final String elementCanonicalTypeString;
 
     private int elementCategory;
 
     private Integer elementUnderEditPosition;
 
-    public ArrayEntryAdapter(Activity activity, StackableType<?> elementType, int elementCategory, List<Object> list) {
+    public ArrayEntryAdapter(Activity activity, ABIType<?> elementType, int elementCategory, List<Object> list) {
         this.activity = activity;
         this.colorRed = activity.getResources().getColor(R.color.colorAccent);
         this.colorGreen = activity.getResources().getColor(R.color.colorPrimary);

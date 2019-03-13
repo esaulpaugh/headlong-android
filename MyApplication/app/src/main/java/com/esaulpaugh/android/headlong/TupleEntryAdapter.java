@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
-import com.esaulpaugh.headlong.abi.StackableType;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.util.ClassNames;
 
@@ -50,16 +50,16 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
         final Triple triple = list.get(position);
 
-        final String canonical = triple.stackableType.getCanonicalType();
+        final String canonical = triple.abiType.getCanonicalType();
 
-        holder.type.setText(canonical + ", " + ClassNames.toFriendly(triple.stackableType.className()));
+        holder.type.setText(canonical + ", " + ClassNames.toFriendly(triple.abiType.clazz().getName()));
 
         holder.typeableValue.setText("");
 
         if(canonical.startsWith("(") && canonical.endsWith(")")) {
 
             if(canonical.equals("()")) {
-                list.set(holder.getAdapterPosition(), new Triple(triple.stackableType, Tuple.EMPTY));
+                list.set(holder.getAdapterPosition(), new Triple(triple.abiType, Tuple.EMPTY));
             } else {
                 holder.editableValue.setOnClickListener(v -> {
                     elementUnderEditPosition = holder.getAdapterPosition();
@@ -111,11 +111,11 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                     Triple newTriple = list.get(holder.getAdapterPosition());
 
                     Object obj;
-                    if (newTriple.stackableType instanceof ArrayType && ((ArrayType<StackableType<?>, ?>) newTriple.stackableType).isString()) {
+                    if (newTriple.abiType instanceof ArrayType && ((ArrayType<ABIType<?>, ?>) newTriple.abiType).isString()) {
                         obj = argString;
                     } else {
                         try {
-                            obj = newTriple.stackableType.parseArgument(argString);
+                            obj = newTriple.abiType.parseArgument(argString);
                         } catch (IllegalArgumentException iae) {
                             obj = null;
                         } catch (UnsupportedOperationException uoe) {
@@ -123,7 +123,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                         }
                     }
 
-                    Triple newNewTriple = new Triple(newTriple.stackableType, obj);
+                    Triple newNewTriple = new Triple(newTriple.abiType, obj);
 
                     list.set(holder.getAdapterPosition(), newNewTriple);
 
@@ -141,7 +141,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         boolean valid = triple.object != null;
         if(valid) {
             try {
-                triple.stackableType.validate(triple.object);
+                triple.abiType.validate(triple.object);
             } catch (IllegalArgumentException iae) {
                 valid = false;
             }
@@ -174,7 +174,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
     public void returnEditedObject(Object obj) {
 
         Triple existing = list.get(elementUnderEditPosition);
-        list.set(elementUnderEditPosition, new Triple(existing.stackableType, obj));
+        list.set(elementUnderEditPosition, new Triple(existing.abiType, obj));
         notifyItemChanged(elementUnderEditPosition);
     }
 }
