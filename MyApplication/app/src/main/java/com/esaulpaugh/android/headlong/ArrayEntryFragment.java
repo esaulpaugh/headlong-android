@@ -1,5 +1,6 @@
 package com.esaulpaugh.android.headlong;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @SuppressWarnings("unchecked")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -266,7 +268,11 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             defaultVal = obj;
             refreshList();
         } else {
-            adapter.returnEditedObject(obj);
+            try {
+                adapter.returnEditedObject(obj);
+            } catch (NullPointerException npe) {
+                Toast.makeText(getActivity(), npe.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
