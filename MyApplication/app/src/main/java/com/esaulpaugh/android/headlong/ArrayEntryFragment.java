@@ -81,7 +81,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
 
         final ArrayType<ABIType<?>, ?> arrayType;
         try {
-            arrayType = (ArrayType<ABIType<?>, ?>) TupleType.parse("(" + arrayTypeString + ")").getElementTypes()[0];
+            arrayType = (ArrayType<ABIType<?>, ?>) TupleType.parse("(" + arrayTypeString + ")").get(0);
         } catch (ParseException pe) {
             Toast.makeText(getActivity(), pe.getMessage(), Toast.LENGTH_LONG).show();
             return view;
