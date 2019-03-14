@@ -102,7 +102,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
             try {
                 TupleType tt = TupleType.parse(subtupleTypeString);
                 listElements.clear();
-                for(ABIType<?> abiType : tt.elements()) {
+                for(ABIType<?> abiType : tt) {
                     listElements.add(new Triple(abiType, null));
                 }
                 adapter.notifyDataSetChanged();
@@ -134,7 +134,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
 
                         listElements.clear();
 
-                        for(ABIType<?> abiType : tt.elements()) {
+                        for(ABIType<?> abiType : tt) {
                             listElements.add(new Triple(abiType, null));
                         }
 
