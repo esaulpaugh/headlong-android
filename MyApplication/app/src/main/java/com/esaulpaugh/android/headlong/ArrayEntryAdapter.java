@@ -84,7 +84,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
 
             holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
                 if(hasFocus) {
-                    validateTypeable((String) list.get(position), holder.typeableValue);
+                    validateTypeable((String) list.get(position), holder.typeableValue, true);
                 }
             });
 
@@ -104,16 +104,9 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
 
                     final String argString = s.toString();
 
-                    boolean valid = true;
-                    try {
-                        Object obj = argString;
-                        list.set(holder.getAdapterPosition(), obj);
-                    } catch (IllegalArgumentException iae) {
-                        valid = false;
-                    }
+                    validateTypeable(argString, holder.typeableValue, false);
 
-                    int colorInt = activity.getResources().getColor(valid ? R.color.colorPrimary : R.color.colorAccent);
-                    holder.typeableValue.setBackgroundColor(colorInt);
+                    list.set(holder.getAdapterPosition(), argString);
                 }
             };
             holder.typeableValue.addTextChangedListener(holder.textWatcher);
@@ -126,24 +119,26 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
         }
 
         if(elementCategory == ArrayEntryFragment.CATEGORY_TYPEABLE) {
-            validateTypeable((String) element, holder.typeableValue);
+            validateTypeable((String) element, holder.typeableValue, true);
         } else {
             validateEditable(element, holder.editableValue);
         }
     }
 
-    private void validateTypeable(String valString, EditText typeableValueView) {
+    private void validateTypeable(String valString, EditText typeableValueView, boolean setText) {
         boolean valid = valString != null;
         if(valid) {
             try {
-                Object val = elementType.parseArgument(valString);
-                typeableValueView.setText(valString);
+                elementType.parseArgument(valString);
+                if(setText) {
+                    typeableValueView.setText(valString);
+                }
             } catch (IllegalArgumentException iae) {
                 valid = false;
             }
         }
 
-        System.out.println("validateTypeable() = " + valid);
+        System.out.println("validateTypeable(" + setText + ") = " + valid);
 
         typeableValueView.setBackgroundColor(valid ? colorGreen : colorRed);
     }
