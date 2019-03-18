@@ -130,7 +130,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
                     try {
                         Function f = new Function(s.toString());
 
-                        TupleType tt = f.getInputTypes();
+                        TupleType tt = f.getParamTypes();
 
                         listElements.clear();
 

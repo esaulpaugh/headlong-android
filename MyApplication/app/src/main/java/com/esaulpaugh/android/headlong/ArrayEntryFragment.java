@@ -277,7 +277,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
 
     private Object createArray(ArrayType arrayType, int length) throws ClassNotFoundException {
 
-        final String elementClassName = arrayType.getElementClassName();
+        final String elementClassName = arrayType.getElementType().clazz().getName();
 
         System.out.println(elementClassName);
 
@@ -350,8 +350,8 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    private Object[] createObjectArray(ArrayType arrayType) throws ClassNotFoundException {
-        Object[] array = (Object[]) Array.newInstance(Class.forName(arrayType.getElementClassName()), length);
+    private Object[] createObjectArray(ArrayType arrayType) {
+        Object[] array = (Object[]) Array.newInstance(arrayType.getElementType().clazz(), length);
 
         int i = 0;
         if(elementCategory == CATEGORY_TYPEABLE) {
