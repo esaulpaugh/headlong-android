@@ -283,6 +283,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
 
         int i = 0;
         switch (elementClassName) {
+        case "java.lang.Byte":
         case "B": {
             byte[] arr = new byte[length];
             for (Object e : listElements) {
@@ -290,6 +291,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             }
             return arr;
         }
+        case "java.lang.Short":
         case "S": {
             short[] arr = new short[length];
             for (Object e : listElements) {
@@ -297,6 +299,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             }
             return arr;
         }
+        case "java.lang.Integer":
         case "I": {
             int[] arr = new int[length];
             for (Object e : listElements) {
@@ -304,6 +307,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             }
             return arr;
         }
+        case "java.lang.Long":
         case "J": {
             long[] arr = new long[length];
             for (Object e : listElements) {
@@ -311,6 +315,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             }
             return arr;
         }
+        case "java.lang.Float":
         case "F": {
             float[] arr = new float[length];
             for (Object e : listElements) {
@@ -318,6 +323,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             }
             return arr;
         }
+        case "java.lang.Double":
         case "D": {
             double[] arr = new double[length];
             for (Object e : listElements) {
@@ -325,6 +331,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             }
             return arr;
         }
+        case "java.lang.Character":
         case "C": {
             char[] arr = new char[length];
             for (Object e : listElements) {
@@ -332,6 +339,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             }
             return arr;
         }
+        case "java.lang.Boolean":
         case "Z": {
             boolean[] arr = new boolean[length];
             for (Object e : listElements) {
