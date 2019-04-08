@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
@@ -172,9 +173,12 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
     }
 
     public void returnEditedObject(Object obj) {
-
-        Triple existing = list.get(elementUnderEditPosition);
-        list.set(elementUnderEditPosition, new Triple(existing.abiType, obj));
-        notifyItemChanged(elementUnderEditPosition);
+        try {
+            Triple existing = list.get(elementUnderEditPosition);
+            list.set(elementUnderEditPosition, new Triple(existing.abiType, obj));
+            notifyItemChanged(elementUnderEditPosition);
+        } catch (IndexOutOfBoundsException ioobe) {
+            Toast.makeText(activity, ioobe.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }
