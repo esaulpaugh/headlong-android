@@ -64,7 +64,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
             } else {
                 holder.editableValue.setOnClickListener(v -> {
                     elementUnderEditPosition = holder.getAdapterPosition();
-                    EditorActivity.startSubtupleActivity(activity, canonical);
+                    EditorActivity.startSubtupleActivity(activity, canonical, false);
                 });
             }
             validate(list.get(holder.getAdapterPosition()), holder.editableValue);

@@ -43,7 +43,7 @@ public class EditorActivity extends Activity {
         typeString = extras.getString(ARG_TYPE_STRING);
 
         if(activityForSubtuple) {
-            entryFragment = TupleEntryFragment.newInstance(true, typeString);
+            entryFragment = TupleEntryFragment.newInstance(true, typeString, forDefaultVal);
         } else {
             entryFragment = ArrayEntryFragment.newInstance(forDefaultVal, typeString);
         }
@@ -54,8 +54,9 @@ public class EditorActivity extends Activity {
         fragmentTransaction.commit();
     }
 
-    static void startSubtupleActivity(Activity activity, String subtupleTypeString) {
+    static void startSubtupleActivity(Activity activity, String subtupleTypeString, boolean forDefaultVal) {
         Intent i = new Intent(activity, EditorActivity.class);
+        i.putExtra(FOR_DEFAULT_VAL, forDefaultVal);
         i.putExtra(ARG_ACTIVITY_FOR_SUBTUPLE, true);
         i.putExtra(ARG_TYPE_STRING, subtupleTypeString);
         activity.startActivityForResult(i, CODE_SUBTUPLE);

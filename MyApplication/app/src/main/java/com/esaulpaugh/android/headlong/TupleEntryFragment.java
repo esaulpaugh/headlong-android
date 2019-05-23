@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.esaulpaugh.android.headlong.EditorActivity.ENCODED_TUPLE_BYTES;
+import static com.esaulpaugh.android.headlong.EditorActivity.FOR_DEFAULT_VAL;
 
 public class TupleEntryFragment extends Fragment implements EntryFragment {
 
@@ -43,6 +44,8 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
     static final String ARG_FOR_SUBTUPLE = "for_subtuple";
     static final String ARG_SUBTUPLE_TYPE_STRING = "subtuple_type_string";
 
+    private boolean forDefaultVal;
+
     private boolean forSubtuple;
     private String subtupleTypeString;
 
@@ -56,12 +59,13 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
     }
 
     public static TupleEntryFragment newInstance() {
-        return newInstance(false, null);
+        return newInstance(false, null, false);
     }
 
-    public static TupleEntryFragment newInstance(boolean subtuple, String subtupleTypeString) {
+    public static TupleEntryFragment newInstance(boolean subtuple, String subtupleTypeString, boolean forDefaultVal) {
         TupleEntryFragment fragment = new TupleEntryFragment();
         Bundle args = new Bundle();
+        args.putBoolean(FOR_DEFAULT_VAL, forDefaultVal);
         args.putBoolean(ARG_FOR_SUBTUPLE, subtuple);
         args.putString(ARG_SUBTUPLE_TYPE_STRING, subtupleTypeString);
         fragment.setArguments(args);
@@ -72,6 +76,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            forDefaultVal = getArguments().getBoolean(FOR_DEFAULT_VAL);
             forSubtuple = getArguments().getBoolean(ARG_FOR_SUBTUPLE);
             subtupleTypeString = getArguments().getString(ARG_SUBTUPLE_TYPE_STRING);
         }
@@ -167,6 +172,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
                     TupleType tt = TupleType.parse(subtupleTypeString);
                     byte[] tupleBytes = tt.encode(subtuple).array();
 
+                    intent.putExtra(FOR_DEFAULT_VAL, forDefaultVal);
                     intent.putExtra(ENCODED_TUPLE_BYTES, tupleBytes);
 
                     getActivity().setResult(EditorActivity.CODE_SUBTUPLE, intent);

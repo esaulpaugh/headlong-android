@@ -167,7 +167,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                 defaultVal = Tuple.EMPTY;
                 refreshList();
             } else {
-                defaultValView.setOnClickListener(v -> EditorActivity.startSubtupleActivity(getActivity(), elementCanonical));
+                defaultValView.setOnClickListener(v -> EditorActivity.startSubtupleActivity(getActivity(), elementCanonical, true));
             }
             break;
         case CATEGORY_ARRAY:

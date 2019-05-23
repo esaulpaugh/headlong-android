@@ -63,7 +63,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
             } else {
                 holder.editableValue.setOnClickListener(v -> {
                     elementUnderEditPosition = holder.getAdapterPosition();
-                    EditorActivity.startSubtupleActivity(activity, elementCanonicalTypeString);
+                    EditorActivity.startSubtupleActivity(activity, elementCanonicalTypeString, false);
                 });
             }
 
