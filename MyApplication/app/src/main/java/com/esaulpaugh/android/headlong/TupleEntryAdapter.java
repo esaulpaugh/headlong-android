@@ -2,7 +2,6 @@ package com.esaulpaugh.android.headlong;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -10,12 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
-import com.esaulpaugh.headlong.abi.util.ClassNames;
+import com.esaulpaugh.headlong.abi.util.Utils;
 
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
         final String canonical = triple.abiType.getCanonicalType();
 
-        holder.type.setText(canonical + ", " + ClassNames.toFriendly(triple.abiType.clazz().getName()));
+        holder.type.setText(canonical + ", " + Utils.friendlyClassName(triple.abiType.clazz()));
 
         holder.typeableValue.setText("");
 

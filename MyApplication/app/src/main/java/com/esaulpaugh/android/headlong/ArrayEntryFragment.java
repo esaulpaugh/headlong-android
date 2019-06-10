@@ -20,7 +20,7 @@ import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
-import com.esaulpaugh.headlong.abi.util.ClassNames;
+import com.esaulpaugh.headlong.abi.util.Utils;
 
 import java.lang.reflect.Array;
 import java.text.ParseException;
@@ -159,7 +159,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         adapter = new ArrayEntryAdapter(getActivity(), elementType, elementCategory, listElements);
         recyclerView.setAdapter(adapter);
 
-        type.setText("Set all, " + elementCanonical + ", " + ClassNames.toFriendly(elementType.clazz().getName()));
+        type.setText("Set all, " + elementCanonical + ", " + Utils.friendlyClassName(elementType.clazz()));
 
         switch (elementCategory) {
         case CATEGORY_TUPLE:
