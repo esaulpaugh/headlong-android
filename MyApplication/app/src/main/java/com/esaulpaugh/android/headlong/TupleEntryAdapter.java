@@ -16,6 +16,7 @@ import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.util.Utils;
+import com.esaulpaugh.headlong.util.Strings;
 
 import java.util.List;
 
@@ -120,7 +121,11 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                         } catch (IllegalArgumentException iae) {
                             obj = null;
                         } catch (UnsupportedOperationException uoe) {
-                            obj = null;
+                            if(newTriple.abiType.clazz() == byte[].class) {
+                                obj = Strings.decode(argString, Strings.UTF_8);
+                            } else {
+                                obj = null;
+                            }
                         }
                     }
 

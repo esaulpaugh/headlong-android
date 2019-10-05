@@ -25,9 +25,9 @@ android {
 
 dependencies {
 
-//    implementation files('libs/headlong-1.3.2.jar')
+//    implementation files('libs/headlong-1.4.8.jar')
 
-    implementation 'com.esaulpaugh:headlong:1.4.7'
+    implementation 'com.esaulpaugh:headlong:1.4.8'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
