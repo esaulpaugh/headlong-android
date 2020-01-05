@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
 
@@ -85,8 +86,8 @@ public class EditorActivity extends Activity {
 
                     entryFragment.returnEditedObject(subtuple, forDefaultVal);
 
-                } catch (ParseException pe) {
-                    throw new RuntimeException(pe);
+                } catch (ABIException e) {
+                    throw new RuntimeException(e);
                 }
             } else if (requestCode == CODE_ARRAY && resultCode == CODE_ARRAY) {
                 String arrayTypeString = data.getStringExtra(ArrayEntryFragment.ARG_ARRAY_TYPE_STRING);
@@ -97,8 +98,8 @@ public class EditorActivity extends Activity {
                     Tuple result = TupleType.parse("(" + arrayTypeString + ")").decode(encodedArrayBytes);
 
                     entryFragment.returnEditedObject(result.get(0), forDefaultVal);
-                } catch (ParseException pe) {
-                    throw new RuntimeException(pe);
+                } catch (ABIException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }

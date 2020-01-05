@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.esaulpaugh.android.headlong"
         minSdkVersion 20
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -20,14 +20,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    buildToolsVersion = '29.0.2'
+    buildToolsVersion = '28.0.0'
 }
 
 dependencies {
 
-//    implementation files('libs/headlong-1.4.8.jar')
+//    implementation files('libs/headlong-1.4.11.jar')
 
-    implementation 'com.esaulpaugh:headlong:1.4.10'
+    implementation 'com.esaulpaugh:headlong:2.0.0-SNAPSHOT'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

@@ -112,8 +112,8 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
                 }
                 adapter.notifyDataSetChanged();
 
-            } catch (ParseException pe) {
-                Toast.makeText(getActivity(), pe.getMessage(), Toast.LENGTH_SHORT).show();
+            } catch (IllegalArgumentException iae) {
+                Toast.makeText(getActivity(), iae.getMessage(), Toast.LENGTH_SHORT).show();
             }
         } else {
             enterSignature.setVisibility(View.VISIBLE);
@@ -145,7 +145,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
 
                         adapter.notifyDataSetChanged();
 
-                    } catch (ParseException pe) {
+                    } catch (IllegalArgumentException iae) {
                         listElements.clear();
                         adapter.notifyDataSetChanged();
                     }

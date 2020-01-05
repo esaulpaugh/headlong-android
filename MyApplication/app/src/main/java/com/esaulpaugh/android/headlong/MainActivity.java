@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
@@ -63,14 +64,14 @@ public class MainActivity extends Activity {
             } else {
                 try {
                     gogo(tupleEntryFragment.getFunctionSignature());
-                } catch (ParseException pe) {
-                    output.setText(pe.getMessage());
+                } catch (ABIException e) {
+                    output.setText(e.getMessage());
                 }
             }
         });
     }
 
-    private void gogo(String signature) throws ParseException {
+    private void gogo(String signature) throws ABIException {
         Tuple masterTuple = tupleEntryFragment.getMasterTuple();
 
         Function f = new Function(signature);
@@ -101,8 +102,8 @@ public class MainActivity extends Activity {
 
                 tupleEntryFragment.returnEditedObject(subtuple, false);
 
-            } catch (ParseException pe) {
-                throw new RuntimeException(pe);
+            } catch (ABIException e) {
+                throw new RuntimeException(e);
             }
         } else if(requestCode == EditorActivity.CODE_ARRAY && resultCode == EditorActivity.CODE_ARRAY) {
 
@@ -114,8 +115,8 @@ public class MainActivity extends Activity {
 
                 tupleEntryFragment.returnEditedObject(wrapper.get(0), false);
 
-            } catch (ParseException pe) {
-                throw new RuntimeException(pe);
+            } catch (ABIException e) {
+                throw new RuntimeException(e);
             }
         } else {
             Log.e(TAG, "????????????????????????????????????????????????????????????????");

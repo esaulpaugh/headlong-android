@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
+import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
@@ -118,7 +119,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                     } else {
                         try {
                             obj = newTriple.abiType.parseArgument(argString);
-                        } catch (IllegalArgumentException iae) {
+                        } catch (ABIException e) {
                             obj = null;
                         } catch (UnsupportedOperationException uoe) {
                             if(newTriple.abiType.clazz() == byte[].class) {
@@ -148,7 +149,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         if(valid) {
             try {
                 triple.abiType.validate(triple.object);
-            } catch (IllegalArgumentException iae) {
+            } catch (ABIException e) {
                 valid = false;
             }
         }

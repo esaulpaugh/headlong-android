@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
@@ -81,8 +82,8 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         final ArrayType<ABIType<?>, ?> arrayType;
         try {
             arrayType = (ArrayType<ABIType<?>, ?>) TupleType.parse("(" + arrayTypeString + ")").get(0);
-        } catch (ParseException pe) {
-            Toast.makeText(getActivity(), pe.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (IllegalArgumentException iae) {
+            Toast.makeText(getActivity(), iae.getMessage(), Toast.LENGTH_LONG).show();
             return view;
         }
 
@@ -197,7 +198,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                         elementType.parseArgument(argString);
                         defaultVal = null;
                         defaultValString = argString;
-                    } catch (IllegalArgumentException iae) {
+                    } catch (IllegalArgumentException | ABIException e) {
                         valid = false;
                         defaultVal = null;
                         defaultValString = null;
@@ -275,7 +276,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    private Object createArray(ArrayType arrayType, int length) throws ClassNotFoundException {
+    private Object createArray(ArrayType arrayType, int length) throws ABIException {
 
         final String elementClassName = arrayType.getElementType().clazz().getName();
 
@@ -358,7 +359,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    private Object[] createObjectArray(ArrayType arrayType) {
+    private Object[] createObjectArray(ArrayType arrayType) throws ABIException {
         Object[] array = (Object[]) Array.newInstance(arrayType.getElementType().clazz(), length);
 
         int i = 0;

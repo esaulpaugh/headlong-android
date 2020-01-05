@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.Tuple;
 
@@ -133,7 +134,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
                 if(setText) {
                     typeableValueView.setText(valString);
                 }
-            } catch (IllegalArgumentException iae) {
+            } catch (IllegalArgumentException | ABIException e) {
                 valid = false;
             }
         }
@@ -149,7 +150,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
         if(valid) {
             try {
                 elementType.validate(val);
-            } catch (IllegalArgumentException iae) {
+            } catch (IllegalArgumentException | ABIException e) {
                 valid = false;
             }
         }
