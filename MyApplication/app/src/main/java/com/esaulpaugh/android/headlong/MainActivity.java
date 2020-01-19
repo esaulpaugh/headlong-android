@@ -122,4 +122,40 @@ public class MainActivity extends Activity {
             Log.e(TAG, "????????????????????????????????????????????????????????????????");
         }
     }
+
+    static String friendlyClassName(Class<?> clazz, Integer arrayLength) {
+        final String className = clazz.getName();
+
+        final int split = className.lastIndexOf('[') + 1;
+        final boolean hasArraySuffix = split > 0;
+        final String base = hasArraySuffix ? className.substring(split) : className;
+        final StringBuilder sb = new StringBuilder();
+        switch (base) {
+        case "B": sb.append("byte"); break;
+        case "S": sb.append("short"); break;
+        case "I": sb.append("int"); break;
+        case "J": sb.append("long"); break;
+        case "F": sb.append("float"); break;
+        case "D": sb.append("double"); break;
+        case "C": sb.append("char"); break;
+        case "Z": sb.append("boolean"); break;
+        default: {
+            int lastDotIndex = base.lastIndexOf('.');
+            if(lastDotIndex != -1) {
+                sb.append(base, lastDotIndex + 1, base.length() - (base.charAt(0) == 'L' ? 1 : 0));
+            }
+        }
+        }
+        if(hasArraySuffix) {
+            int i = 0;
+            if(arrayLength != null && arrayLength >= 0) {
+                sb.append('[').append(arrayLength).append(']');
+                i++;
+            }
+            for ( ; i < split; i++) {
+                sb.append("[]");
+            }
+        }
+        return sb.toString();
+    }
 }

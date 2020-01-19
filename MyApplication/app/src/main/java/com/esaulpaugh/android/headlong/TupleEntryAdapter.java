@@ -16,7 +16,6 @@ import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
-import com.esaulpaugh.headlong.abi.util.Utils;
 import com.esaulpaugh.headlong.util.Strings;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
         final String canonical = triple.abiType.getCanonicalType();
 
-        holder.type.setText(canonical + ", " + Utils.friendlyClassName(triple.abiType.clazz()));
+        holder.type.setText(canonical + ", " + MainActivity.friendlyClassName(triple.abiType.clazz(), null));
 
         holder.typeableValue.setText("");
 
