@@ -275,13 +275,8 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
     }
 
     private Object createArray(ArrayType arrayType, int length) throws ABIException {
-
-        final String elementClassName = arrayType.getElementType().clazz().getName();
-
-        System.out.println(elementClassName);
-
         int i = 0;
-        switch (elementClassName) {
+        switch (arrayType.getElementType().clazz().getName()) {
         case "java.lang.Byte":
         case "B": {
             byte[] arr = new byte[length];
