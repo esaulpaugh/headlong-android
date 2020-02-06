@@ -2,6 +2,7 @@ package com.esaulpaugh.android.headlong;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -9,10 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
-import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
@@ -118,7 +117,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                     } else {
                         try {
                             obj = newTriple.abiType.parseArgument(argString);
-                        } catch (ABIException e) {
+                        } catch (IllegalArgumentException iae) {
                             obj = null;
                         } catch (UnsupportedOperationException uoe) {
                             if(newTriple.abiType.clazz() == byte[].class) {
@@ -148,7 +147,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         if(valid) {
             try {
                 triple.abiType.validate(triple.object);
-            } catch (ABIException e) {
+            } catch (IllegalArgumentException iae) {
                 valid = false;
             }
         }

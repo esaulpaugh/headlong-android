@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
@@ -196,7 +195,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                         elementType.parseArgument(argString);
                         defaultVal = null;
                         defaultValString = argString;
-                    } catch (IllegalArgumentException | ABIException e) {
+                    } catch (IllegalArgumentException iae) {
                         valid = false;
                         defaultVal = null;
                         defaultValString = null;
@@ -274,7 +273,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    private Object createArray(ArrayType arrayType, int length) throws ABIException {
+    private Object createArray(ArrayType arrayType, int length) {
         int i = 0;
         switch (arrayType.getElementType().clazz().getName()) {
         case "java.lang.Byte":
@@ -352,7 +351,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    private Object[] createObjectArray(ArrayType arrayType) throws ABIException {
+    private Object[] createObjectArray(ArrayType arrayType) {
         Object[] array = (Object[]) Array.newInstance(arrayType.getElementType().clazz(), length);
 
         int i = 0;

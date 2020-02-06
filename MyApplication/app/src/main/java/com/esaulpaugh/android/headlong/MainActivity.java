@@ -26,13 +26,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
 
 import java.nio.ByteBuffer;
-import java.text.ParseException;
 
 public class MainActivity extends Activity {
 
@@ -64,14 +62,14 @@ public class MainActivity extends Activity {
             } else {
                 try {
                     gogo(tupleEntryFragment.getFunctionSignature());
-                } catch (ABIException e) {
-                    output.setText(e.getMessage());
+                } catch (IllegalArgumentException iae) {
+                    output.setText(iae.getMessage());
                 }
             }
         });
     }
 
-    private void gogo(String signature) throws ABIException {
+    private void gogo(String signature) {
         Tuple masterTuple = tupleEntryFragment.getMasterTuple();
 
         Function f = new Function(signature);
@@ -97,27 +95,17 @@ public class MainActivity extends Activity {
             String subtupleTypeString = data.getStringExtra(TupleEntryFragment.ARG_SUBTUPLE_TYPE_STRING);
 
             byte[] encodedTupleBytes = data.getByteArrayExtra(EditorActivity.ENCODED_TUPLE_BYTES);
-            try {
-                Tuple subtuple = TupleType.parse(subtupleTypeString).decode(encodedTupleBytes);
+            Tuple subtuple = TupleType.parse(subtupleTypeString).decode(encodedTupleBytes);
 
-                tupleEntryFragment.returnEditedObject(subtuple, false);
-
-            } catch (ABIException e) {
-                throw new RuntimeException(e);
-            }
+            tupleEntryFragment.returnEditedObject(subtuple, false);
         } else if(requestCode == EditorActivity.CODE_ARRAY && resultCode == EditorActivity.CODE_ARRAY) {
 
             String arrayTypeString = data.getStringExtra(ArrayEntryFragment.ARG_ARRAY_TYPE_STRING);
 
             byte[] encodedArrayBytes = data.getByteArrayExtra(EditorActivity.ENCODED_ARRAY_BYTES);
-            try {
-                Tuple wrapper = TupleType.parse("(" + arrayTypeString + ")").decode(encodedArrayBytes);
+            Tuple wrapper = TupleType.parse("(" + arrayTypeString + ")").decode(encodedArrayBytes);
 
-                tupleEntryFragment.returnEditedObject(wrapper.get(0), false);
-
-            } catch (ABIException e) {
-                throw new RuntimeException(e);
-            }
+            tupleEntryFragment.returnEditedObject(wrapper.get(0), false);
         } else {
             Log.e(TAG, "????????????????????????????????????????????????????????????????");
         }

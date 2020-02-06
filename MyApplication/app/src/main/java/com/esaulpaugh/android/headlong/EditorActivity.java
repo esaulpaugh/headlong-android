@@ -7,11 +7,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.esaulpaugh.headlong.abi.ABIException;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
-
-import java.text.ParseException;
 
 public class EditorActivity extends Activity {
 
@@ -81,26 +78,17 @@ public class EditorActivity extends Activity {
 
                 boolean forDefaultVal = data.getBooleanExtra(FOR_DEFAULT_VAL, false);
                 byte[] encodedTupleBytes = data.getByteArrayExtra(ENCODED_TUPLE_BYTES);
-                try {
-                    Tuple subtuple = TupleType.parse(subtupleTypeString).decode(encodedTupleBytes);
+                Tuple subtuple = TupleType.parse(subtupleTypeString).decode(encodedTupleBytes);
 
-                    entryFragment.returnEditedObject(subtuple, forDefaultVal);
-
-                } catch (ABIException e) {
-                    throw new RuntimeException(e);
-                }
+                entryFragment.returnEditedObject(subtuple, forDefaultVal);
             } else if (requestCode == CODE_ARRAY && resultCode == CODE_ARRAY) {
                 String arrayTypeString = data.getStringExtra(ArrayEntryFragment.ARG_ARRAY_TYPE_STRING);
 
                 boolean forDefaultVal = data.getBooleanExtra(FOR_DEFAULT_VAL, false);
                 byte[] encodedArrayBytes = data.getByteArrayExtra(ENCODED_ARRAY_BYTES);
-                try {
-                    Tuple result = TupleType.parse("(" + arrayTypeString + ")").decode(encodedArrayBytes);
+                Tuple result = TupleType.parse("(" + arrayTypeString + ")").decode(encodedArrayBytes);
 
-                    entryFragment.returnEditedObject(result.get(0), forDefaultVal);
-                } catch (ABIException e) {
-                    throw new RuntimeException(e);
-                }
+                entryFragment.returnEditedObject(result.get(0), forDefaultVal);
             }
         }
     }

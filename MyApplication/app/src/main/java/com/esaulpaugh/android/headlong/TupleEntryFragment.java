@@ -21,7 +21,6 @@ import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
