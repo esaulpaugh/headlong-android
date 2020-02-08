@@ -28,7 +28,8 @@
             android:text="output"
             android:textSize="9sp"
             android:textColor="@android:color/black"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:fontFamily="monospace" />
 
     </ScrollView>
 
