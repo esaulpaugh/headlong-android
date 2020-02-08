@@ -47,6 +47,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle("headlong demo");
+
         output = (TextView) findViewById(R.id.output);
         Button gogo = (Button) findViewById(R.id.gogo);
 

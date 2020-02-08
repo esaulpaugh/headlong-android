@@ -29,7 +29,8 @@
             android:textSize="9sp"
             android:textColor="@android:color/black"
             android:layout_margin="10dp"
-            android:fontFamily="monospace" />
+            android:fontFamily="monospace"
+            android:textIsSelectable="true"/>
 
     </ScrollView>
 

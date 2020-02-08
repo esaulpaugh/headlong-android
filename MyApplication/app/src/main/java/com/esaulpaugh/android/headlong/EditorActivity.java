@@ -32,6 +32,8 @@ public class EditorActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+        setTitle("edit");
+
         System.out.println("===== " + EditorActivity.class.getSimpleName());
 
         Bundle extras = getIntent().getExtras();
