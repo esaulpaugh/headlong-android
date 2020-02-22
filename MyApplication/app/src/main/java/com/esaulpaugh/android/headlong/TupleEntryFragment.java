@@ -53,6 +53,10 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
 
     private TupleEntryAdapter adapter;
 
+    private EditText enterSignature;
+
+    private List<Triple> listElements;
+
     public TupleEntryFragment() {
         // Required empty public constructor
     }
@@ -74,6 +78,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listElements = new ArrayList<>();
         if (getArguments() != null) {
             forDefaultVal = getArguments().getBoolean(FOR_DEFAULT_VAL);
             forSubtuple = getArguments().getBoolean(ARG_FOR_SUBTUPLE);
@@ -87,12 +92,10 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
 
         Button returnTuple = (Button) view.findViewById(R.id.return_tuple);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        EditText enterSignature = (EditText) view.findViewById(R.id.enter_signature);
+        enterSignature = (EditText) view.findViewById(R.id.enter_signature);
         TextView tupleTypeString = (TextView) view.findViewById(R.id.tuple_type_string);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        List<Triple> listElements = new ArrayList<>();
 
         adapter = new TupleEntryAdapter(getActivity(), listElements);
 
@@ -153,37 +156,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         }
 
         returnTuple.setOnClickListener(v -> {
-
-// TODO handle race conditions, button spam
-
-            Object[] args = new Object[listElements.size()];
-            int i = 0;
-            for (Triple triple : listElements) {
-                args[i++] = triple.object;
-            }
-
-            if (forSubtuple) {
-                this.subtuple = new Tuple(args);
-                Intent intent = new Intent();
-                try {
-                    intent.putExtra(TupleEntryFragment.ARG_SUBTUPLE_TYPE_STRING, subtupleTypeString);
-
-                    TupleType tt = TupleType.parse(subtupleTypeString);
-                    byte[] tupleBytes = tt.encode(subtuple).array();
-
-                    intent.putExtra(FOR_DEFAULT_VAL, forDefaultVal);
-                    intent.putExtra(ENCODED_TUPLE_BYTES, tupleBytes);
-
-                    getActivity().setResult(EditorActivity.CODE_SUBTUPLE, intent);
-                    getActivity().finish();
-
-                } catch (Exception e) {
-                    Toast.makeText(getActivity(), e.getClass().getSimpleName() + " " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            } else {
-                this.masterTuple = new Tuple(args);
-                this.functionSignature = enterSignature.getText().toString();
-            }
+            complete();
         });
 
         return view;
@@ -200,5 +173,48 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
     @Override
     public void returnEditedObject(Object obj, boolean defaultVal) {
         adapter.returnEditedObject(obj);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        complete();
+    }
+
+    private synchronized void complete() {
+        Object[] args = new Object[listElements.size()];
+        int i = 0;
+        for (Triple triple : listElements) {
+            Object arg = triple.object;
+            if(arg == null) {
+                System.err.println("null arg" + i);
+                return;
+            }
+            args[i++] = arg;
+        }
+
+        if (forSubtuple) {
+            this.subtuple = new Tuple(args);
+            Intent intent = new Intent();
+            try {
+                intent.putExtra(TupleEntryFragment.ARG_SUBTUPLE_TYPE_STRING, subtupleTypeString);
+
+                TupleType tt = TupleType.parse(subtupleTypeString);
+                byte[] tupleBytes = tt.encode(subtuple).array();
+
+                intent.putExtra(FOR_DEFAULT_VAL, forDefaultVal);
+                intent.putExtra(ENCODED_TUPLE_BYTES, tupleBytes);
+
+                getActivity().setResult(EditorActivity.CODE_SUBTUPLE, intent);
+                getActivity().finish();
+
+            } catch (Exception e) {
+//                Toast.makeText(getActivity(), e.getClass().getSimpleName() + " " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            System.out.println("setting masterTuple");
+            this.masterTuple = new Tuple(args);
+            this.functionSignature = enterSignature.getText().toString();
+        }
     }
 }

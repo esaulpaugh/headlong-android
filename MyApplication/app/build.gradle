@@ -29,9 +29,9 @@ android {
 
 dependencies {
 
-//    implementation files('libs/headlong-3.1.0-SNAPSHOT.jar')
+//    implementation files('libs/headlong-3.1.1-SNAPSHOT.jar')
 
-    implementation 'com.esaulpaugh:headlong:3.1.0-SNAPSHOT'
+    implementation 'com.esaulpaugh:headlong:3.1.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
