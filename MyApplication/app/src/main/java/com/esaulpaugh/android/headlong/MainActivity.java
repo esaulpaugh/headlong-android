@@ -29,11 +29,8 @@ import android.widget.Toast;
 import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
-import com.esaulpaugh.headlong.util.Integers;
-import com.esaulpaugh.headlong.util.Strings;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class MainActivity extends Activity {
 
@@ -83,38 +80,13 @@ public class MainActivity extends Activity {
             ByteBuffer bb = f.encodeCall(masterTuple);
 
             byte[] arr = bb.array();
-            String formatted = formatCall(arr, 0, arr.length);
+            String formatted = Function.formatCall(arr, 0, arr.length);
 
             output.setText(formatted);
 
         } catch (IllegalArgumentException iae) {
             output.setText(iae.getMessage());
             Toast.makeText(MainActivity.this, iae.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public static String formatCall(byte[] buffer, int offset, final int length) {
-        Integers.checkIsMultiple(length - 4, 32);
-        StringBuilder sb = new StringBuilder();
-        appendPaddedLabel("ID", sb);
-        sb.append(Strings.encode(Arrays.copyOfRange(buffer, offset, 4), Strings.HEX))
-                .append('\n');
-        int idx = offset + 4;
-        while (idx < length) {
-            int row = idx >>> 5;
-            appendPaddedLabel(String.valueOf(row), sb);
-            sb.append(Strings.encode(Arrays.copyOfRange(buffer, idx, idx + 32), Strings.HEX))
-                    .append('\n');
-            idx += 32;
-        }
-        return sb.toString();
-    }
-
-    private static void appendPaddedLabel(String rowStr, StringBuilder sb) {
-        sb.append(rowStr);
-        int n = 9 - rowStr.length();
-        for (int i = 0; i < n; i++) {
-            sb.append(' ');
         }
     }
 
