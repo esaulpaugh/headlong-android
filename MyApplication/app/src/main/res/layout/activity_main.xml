@@ -26,9 +26,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="output"
-            android:textSize="9sp"
+            android:textSize="7sp"
             android:textColor="@android:color/black"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:paddingBottom="10dp"
             android:fontFamily="monospace"
             android:textIsSelectable="true"/>
 
