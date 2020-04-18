@@ -18,7 +18,8 @@
         android:layout_toRightOf="@id/type"
         android:hint="Value"
         android:singleLine="true"
-        android:inputType="textNoSuggestions" />
+        android:inputType="textNoSuggestions"
+        android:textCursorDrawable="@android:color/white"/>
 
     <TextView
         android:id="@+id/editable_value"

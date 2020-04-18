@@ -56,6 +56,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         holder.type.setText(canonical + ", " + MainActivity.friendlyClassName(triple.abiType.clazz(), null));
 
         holder.typeableValue.setText("");
+        ArrayEntryAdapter.setEditTextAttributes(holder.typeableValue, triple.abiType);
 
         if(canonical.startsWith("(") && canonical.endsWith(")")) {
 

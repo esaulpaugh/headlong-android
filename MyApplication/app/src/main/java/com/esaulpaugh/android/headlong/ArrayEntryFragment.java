@@ -143,7 +143,8 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         final View invisibleView;
         if (elementCategory == CATEGORY_TYPEABLE) {
             invisibleView = view.findViewById(R.id.editable_value);
-            defaultValView = (EditText) view.findViewById(R.id.typeable_value);
+            defaultValView = view.findViewById(R.id.typeable_value);
+            ArrayEntryAdapter.setEditTextAttributes((EditText) defaultValView, elementType);
         } else {
             invisibleView = (EditText) view.findViewById(R.id.typeable_value);
             defaultValView = view.findViewById(R.id.editable_value);

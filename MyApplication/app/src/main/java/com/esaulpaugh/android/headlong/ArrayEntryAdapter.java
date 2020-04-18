@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,21 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.argument_row, parent, false);
 
+        setEditTextAttributes((EditText) itemView.findViewById(R.id.typeable_value), elementType);
+
         return new ViewHolder(itemView);
+    }
+
+    static void setEditTextAttributes(EditText editText, ABIType<?> elementType) {
+        switch (elementType.typeCode()) {
+            case ABIType.TYPE_CODE_BYTE:
+            case ABIType.TYPE_CODE_INT:
+            case ABIType.TYPE_CODE_LONG:
+            case ABIType.TYPE_CODE_BIG_INTEGER:
+            case ABIType.TYPE_CODE_BIG_DECIMAL:
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            default: /* skip */
+        }
     }
 
     @Override
