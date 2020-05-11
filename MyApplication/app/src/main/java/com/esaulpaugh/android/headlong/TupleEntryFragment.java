@@ -49,7 +49,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
     private String subtupleTypeString;
 
     private String functionSignature;
-    private Tuple masterTuple, subtuple;
+    private Tuple masterTuple;
 
     private TupleEntryAdapter adapter;
 
@@ -194,8 +194,8 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         }
 
         if (forSubtuple) {
-            this.subtuple = new Tuple(args);
-            Intent intent = new Intent();
+            final Tuple subtuple = new Tuple(args);
+            final Intent intent = new Intent();
             try {
                 intent.putExtra(TupleEntryFragment.ARG_SUBTUPLE_TYPE_STRING, subtupleTypeString);
 
