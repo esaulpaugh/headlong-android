@@ -117,15 +117,17 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                         obj = argString;
                     } else {
                         try {
-                            obj = newTriple.abiType.parseArgument(argString);
-                        } catch (IllegalArgumentException iae) {
-                            obj = null;
-                        } catch (UnsupportedOperationException uoe) {
-                            if(newTriple.abiType.clazz() == byte[].class) {
-                                obj = Strings.decode(argString, Strings.UTF_8);
+                            if(newTriple.abiType.typeCode() == ABIType.TYPE_CODE_ARRAY || newTriple.abiType.typeCode() == ABIType.TYPE_CODE_TUPLE) {
+                                if(newTriple.abiType.clazz() == byte[].class) {
+                                    obj = Strings.decode(argString, Strings.UTF_8);
+                                } else {
+                                    obj = null;
+                                }
                             } else {
-                                obj = null;
+                                obj = newTriple.abiType.parseArgument(argString);
                             }
+                        } catch (IllegalArgumentException | UnsupportedOperationException iae) {
+                            obj = null;
                         }
                     }
 
