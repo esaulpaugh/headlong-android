@@ -73,9 +73,9 @@ public class MainActivity extends Activity {
     private void gogo(String signature) {
         Tuple masterTuple = tupleEntryFragment.getMasterTuple();
 
-        Function f = new Function(signature);
-
         try {
+            Function f = new Function(signature);
+
             ByteBuffer bb = f.encodeCall(masterTuple);
 
             byte[] arr = bb.array();
@@ -83,9 +83,9 @@ public class MainActivity extends Activity {
 
             output.setText(formatted);
 
-        } catch (IllegalArgumentException iae) {
-            output.setText(iae.getMessage());
-            Toast.makeText(MainActivity.this, iae.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (RuntimeException re) {
+            output.setText(re.getMessage());
+            Toast.makeText(MainActivity.this, re.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

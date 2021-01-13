@@ -147,7 +147,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
 
                         adapter.notifyDataSetChanged();
 
-                    } catch (IllegalArgumentException | StringIndexOutOfBoundsException iae) {
+                    } catch (RuntimeException re) {
                         listElements.clear();
                         adapter.notifyDataSetChanged();
                     }
