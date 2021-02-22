@@ -24,14 +24,14 @@ android {
         exclude 'META-INF/LICENSE.md'
         exclude 'META-INF/LICENSE-notice.md'
     }
-    buildToolsVersion = '30.0.2'
+    buildToolsVersion = '30.0.3'
 }
 
 dependencies {
 
 //    implementation files('libs/headlong-3.7.0.jar')
 
-    implementation 'com.esaulpaugh:headlong:4.2.2'
+    implementation 'com.esaulpaugh:headlong:4.3.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
