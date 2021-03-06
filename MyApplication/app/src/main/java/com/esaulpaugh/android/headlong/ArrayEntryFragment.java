@@ -143,12 +143,12 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
 
         final View invisibleView;
         if (elementCategory == CATEGORY_TYPEABLE) {
-            invisibleView = view.findViewById(R.id.editable_value);
+            invisibleView = view.findViewById(R.id.edit_button);
             defaultValView = view.findViewById(R.id.typeable_value);
             ArrayEntryAdapter.setEditTextAttributes((EditText) defaultValView, elementType);
         } else {
             invisibleView = (EditText) view.findViewById(R.id.typeable_value);
-            defaultValView = view.findViewById(R.id.editable_value);
+            defaultValView = view.findViewById(R.id.edit_button);
         }
 
         invisibleView.setVisibility(View.INVISIBLE);
@@ -197,7 +197,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                         elementType.parseArgument(argString);
                         defaultVal = null;
                         defaultValString = argString;
-                    } catch (IllegalArgumentException iae) {
+                    } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
                         valid = false;
                         defaultVal = null;
                         defaultValString = null;

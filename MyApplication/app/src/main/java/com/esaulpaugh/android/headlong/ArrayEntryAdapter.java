@@ -58,7 +58,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
             case ABIType.TYPE_CODE_LONG:
             case ABIType.TYPE_CODE_BIG_INTEGER:
             case ABIType.TYPE_CODE_BIG_DECIMAL:
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
             default: /* skip */
         }
     }
@@ -188,7 +188,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
             super(view);
             type = (TextView) view.findViewById(R.id.type);
             typeableValue = (EditText) view.findViewById(R.id.typeable_value);
-            editableValue = view.findViewById(R.id.editable_value);
+            editableValue = view.findViewById(R.id.edit_button);
         }
     }
 

@@ -21,8 +21,8 @@
         android:inputType="textNoSuggestions"
         android:textCursorDrawable="@android:color/white"/>
 
-    <TextView
-        android:id="@+id/editable_value"
+    <Button
+        android:id="@+id/edit_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/type"

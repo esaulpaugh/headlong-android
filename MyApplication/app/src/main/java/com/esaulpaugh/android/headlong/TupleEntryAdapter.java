@@ -174,7 +174,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
             super(view);
             type = (TextView) view.findViewById(R.id.type);
             typeableValue = (EditText) view.findViewById(R.id.typeable_value);
-            editableValue = view.findViewById(R.id.editable_value);
+            editableValue = view.findViewById(R.id.edit_button);
         }
     }
 
