@@ -1,5 +1,7 @@
 package com.esaulpaugh.android.headlong;
 
+import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -88,9 +90,8 @@ public class EditorActivity extends Activity {
 
                 boolean forDefaultVal = data.getBooleanExtra(FOR_DEFAULT_VAL, false);
                 byte[] encodedArrayBytes = data.getByteArrayExtra(ENCODED_ARRAY_BYTES);
-                Tuple result = TupleType.parse("(" + arrayTypeString + ")").decode(encodedArrayBytes);
-
-                entryFragment.returnEditedObject(result.get(0), forDefaultVal);
+                Object array = parseArrayType(arrayTypeString).decode(encodedArrayBytes);
+                entryFragment.returnEditedObject(array, forDefaultVal);
             }
         }
     }

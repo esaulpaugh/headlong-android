@@ -21,6 +21,7 @@ import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
+import com.esaulpaugh.headlong.abi.TypeFactory;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
 
         final ArrayType<ABIType<?>, ?> arrayType;
         try {
-            arrayType = (ArrayType<ABIType<?>, ?>) TupleType.parse("(" + arrayTypeString + ")").get(0);
+            arrayType = (ArrayType<ABIType<?>, ?>) TypeFactory.create(arrayTypeString);
         } catch (IllegalArgumentException iae) {
             Toast.makeText(getActivity(), iae.getMessage(), Toast.LENGTH_LONG).show();
             return view;
@@ -229,8 +230,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                 intent.putExtra(EditorActivity.FOR_DEFAULT_VAL, forDefaultVal);
                 intent.putExtra(ArrayEntryFragment.ARG_ARRAY_TYPE_STRING, arrayTypeString);
 
-                TupleType tt = TupleType.parse("(" + arrayTypeString + ")");
-                byte[] arrayBytes = tt.encode(new Tuple((Object) array)).array();
+                byte[] arrayBytes = parseArrayType(arrayTypeString).encode(array).array();
 
                 intent.putExtra(EditorActivity.ENCODED_ARRAY_BYTES, arrayBytes);
 
@@ -243,6 +243,10 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         });
 
         return view;
+    }
+
+    static ArrayType<?, ?> parseArrayType(String typeStr) {
+        return (ArrayType<?, ?>) TypeFactory.create(typeStr);
     }
 
     private void refreshList() {

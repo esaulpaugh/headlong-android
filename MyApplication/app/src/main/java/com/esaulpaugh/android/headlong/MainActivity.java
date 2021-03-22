@@ -15,6 +15,8 @@ limitations under the License.
 */
 package com.esaulpaugh.android.headlong;
 
+import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
+
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -25,9 +27,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
+import com.esaulpaugh.headlong.abi.TypeFactory;
 
 import java.nio.ByteBuffer;
 
@@ -105,11 +109,8 @@ public class MainActivity extends Activity {
         } else if(requestCode == EditorActivity.CODE_ARRAY && resultCode == EditorActivity.CODE_ARRAY) {
 
             String arrayTypeString = data.getStringExtra(ArrayEntryFragment.ARG_ARRAY_TYPE_STRING);
-
             byte[] encodedArrayBytes = data.getByteArrayExtra(EditorActivity.ENCODED_ARRAY_BYTES);
-            Tuple wrapper = TupleType.parse("(" + arrayTypeString + ")").decode(encodedArrayBytes);
-
-            tupleEntryFragment.returnEditedObject(wrapper.get(0), false);
+            tupleEntryFragment.returnEditedObject(parseArrayType(arrayTypeString).decode(encodedArrayBytes), false);
         } else {
             Log.e(TAG, "????????????????????????????????????????????????????????????????");
         }
