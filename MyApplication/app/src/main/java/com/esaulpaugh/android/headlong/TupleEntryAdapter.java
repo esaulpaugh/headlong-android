@@ -2,6 +2,7 @@ package com.esaulpaugh.android.headlong;
 
 import android.app.Activity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
+import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.util.Strings;
 
@@ -82,6 +84,15 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         } else {
 
             System.out.println("CANONICAL = " + canonical);
+
+            final int code = triple.abiType.typeCode();
+            if(code != ABIType.TYPE_CODE_BOOLEAN
+                    && code != ABIType.TYPE_CODE_ARRAY
+                    && code != ABIType.TYPE_CODE_TUPLE) {
+                holder.typeableValue.setInputType(InputType.TYPE_CLASS_NUMBER);
+            } else {
+                holder.typeableValue.setInputType(InputType.TYPE_CLASS_TEXT);
+            }
 
             holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
                 if(hasFocus) {
