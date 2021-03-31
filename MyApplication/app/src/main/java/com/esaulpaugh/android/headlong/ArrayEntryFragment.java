@@ -148,7 +148,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             });
         }
 
-        TextView type = (TextView) view.findViewById(R.id.type);
+        final TextView type = (TextView) view.findViewById(R.id.type);
 
         final View invisibleView;
         if (elementCategory == CATEGORY_TYPEABLE) {
@@ -290,7 +290,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    private Object createArray(ArrayType arrayType, int length) {
+    private Object createArray(ArrayType<?, ?> arrayType, int length) {
         int i = 0;
         switch (arrayType.getElementType().clazz().getName()) {
         case "java.lang.Byte":
@@ -368,13 +368,13 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    private Object[] createObjectArray(ArrayType arrayType) {
+    private Object[] createObjectArray(ArrayType<?, ?> arrayType) {
         Object[] array = (Object[]) Array.newInstance(arrayType.getElementType().clazz(), length);
 
         int i = 0;
         if(elementCategory == CATEGORY_TYPEABLE) {
             final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
-            final boolean isString = isArray && ((ArrayType) elementType).isString();
+            final boolean isString = isArray && ((ArrayType<?, ?>) elementType).isString();
             for (Object e : listElements) {
                 array[i++] = parseElement(elementType, (String) e, isString, isArray);
             }
