@@ -86,6 +86,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_tuple_entry, container, false);

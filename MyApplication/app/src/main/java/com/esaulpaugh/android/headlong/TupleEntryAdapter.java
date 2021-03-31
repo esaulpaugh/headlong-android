@@ -1,5 +1,8 @@
 package com.esaulpaugh.android.headlong;
 
+import static com.esaulpaugh.android.headlong.TupleEntryFragment.Triple;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.Editable;
 import android.text.InputType;
@@ -15,13 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
-import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.util.Strings;
 
 import java.util.List;
-
-import static com.esaulpaugh.android.headlong.TupleEntryFragment.Triple;
 
 public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.ViewHolder> {
 
@@ -47,6 +47,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         return new ViewHolder(itemView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
@@ -114,7 +115,6 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
                 }
 
-                @SuppressWarnings("unchecked")
                 @Override
                 public void afterTextChanged(Editable s) {
 
@@ -176,9 +176,9 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView type;
-        private EditText typeableValue;
-        private View editableValue;
+        private final TextView type;
+        private final EditText typeableValue;
+        private final View editableValue;
         private TextWatcher textWatcher;
 
         private ViewHolder(View view) {
