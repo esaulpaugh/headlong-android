@@ -1,5 +1,7 @@
 package com.esaulpaugh.android.headlong;
 
+import static com.esaulpaugh.android.headlong.ArrayEntryFragment.setHint;
+
 import android.app.Activity;
 import android.text.Editable;
 import android.text.InputType;
@@ -8,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +19,7 @@ import com.esaulpaugh.headlong.abi.Tuple;
 
 import java.util.List;
 
-public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.ViewHolder> {
+public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.ViewHolder> {
 
     private final Activity activity;
     private final List<Object> list;
@@ -44,13 +45,13 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TupleEntryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.argument_row, parent, false);
 
         setEditTextAttributes((EditText) itemView.findViewById(R.id.typeable_value), elementType);
 
-        return new ViewHolder(itemView);
+        return new TupleEntryAdapter.ViewHolder(itemView);
     }
 
     static void setEditTextAttributes(EditText editText, ABIType<?> elementType) {
@@ -66,7 +67,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(TupleEntryAdapter.ViewHolder holder, int position) {
 
         final Object element = list.get(position);
 
@@ -129,6 +130,8 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
 
             holder.editableValue.setVisibility(View.INVISIBLE);
             holder.typeableValue.setVisibility(View.VISIBLE);
+
+            setHint(holder.typeableValue, elementType);
             break;
         default:
             throw new Error();
@@ -181,20 +184,6 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView type;
-        private final EditText typeableValue;
-        private final View editableValue;
-        private TextWatcher textWatcher;
-
-        private ViewHolder(View view) {
-            super(view);
-            type = (TextView) view.findViewById(R.id.type);
-            typeableValue = (EditText) view.findViewById(R.id.typeable_value);
-            editableValue = view.findViewById(R.id.edit_button);
-        }
     }
 
     void returnEditedObject(Object array) {

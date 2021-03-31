@@ -33,7 +33,7 @@
             android:id="@+id/length"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Value"
+            android:hint="Length"
             android:singleLine="true"
             android:inputType="number" />
 

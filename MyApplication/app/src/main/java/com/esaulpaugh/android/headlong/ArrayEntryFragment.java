@@ -72,6 +72,14 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
+    static void setHint(EditText editText, ABIType<?> type) {
+        if(type.typeCode() == ABIType.TYPE_CODE_ARRAY) {
+            editText.setHint(((ArrayType<?, ?>) type).isString() ? "UTF-8" : "Hex");
+        } else {
+            editText.setHint("Value");
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("unchecked")
     @Override
@@ -147,6 +155,8 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             invisibleView = view.findViewById(R.id.edit_button);
             defaultValView = view.findViewById(R.id.typeable_value);
             ArrayEntryAdapter.setEditTextAttributes((EditText) defaultValView, elementType);
+
+            setHint((EditText) defaultValView, elementType);
         } else {
             invisibleView = (EditText) view.findViewById(R.id.typeable_value);
             defaultValView = view.findViewById(R.id.edit_button);
@@ -196,7 +206,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                     boolean valid = true;
                     try {
                         final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
-                        final boolean isString = isArray && ((ArrayType) elementType).isString();
+                        final boolean isString = isArray && ((ArrayType<?, ?>) elementType).isString();
                         defaultVal = parseElement(elementType, argString, isString, isArray);
                         defaultValString = argString;
                     } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {

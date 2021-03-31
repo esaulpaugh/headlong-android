@@ -1,5 +1,6 @@
 package com.esaulpaugh.android.headlong;
 
+import static com.esaulpaugh.android.headlong.ArrayEntryFragment.setHint;
 import static com.esaulpaugh.android.headlong.TupleEntryFragment.Triple;
 
 import android.annotation.SuppressLint;
@@ -123,11 +124,12 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                     Triple newTriple = list.get(holder.getAdapterPosition());
 
                     Object obj;
-                    if (newTriple.abiType instanceof ArrayType && ((ArrayType<ABIType<?>, ?>) newTriple.abiType).isString()) {
+                    final boolean isArray = newTriple.abiType.typeCode() == ABIType.TYPE_CODE_ARRAY;
+                    if (isArray && ((ArrayType<ABIType<?>, ?>) newTriple.abiType).isString()) {
                         obj = argString;
                     } else {
                         try {
-                            if(newTriple.abiType.typeCode() == ABIType.TYPE_CODE_ARRAY || newTriple.abiType.typeCode() == ABIType.TYPE_CODE_TUPLE) {
+                            if(isArray || newTriple.abiType.typeCode() == ABIType.TYPE_CODE_TUPLE) {
                                 if(newTriple.abiType.clazz() == (Object) byte[].class) {
                                     obj = Strings.decode(argString, Strings.HEX);
                                 } else {
@@ -152,6 +154,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
             validate(triple, holder.typeableValue);
             holder.editableValue.setVisibility(View.INVISIBLE);
             holder.typeableValue.setVisibility(View.VISIBLE);
+            setHint(holder.typeableValue, triple.abiType);
         }
     }
 
@@ -176,12 +179,12 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView type;
-        private final EditText typeableValue;
-        private final View editableValue;
-        private TextWatcher textWatcher;
+        final TextView type;
+        final EditText typeableValue;
+        final View editableValue;
+        TextWatcher textWatcher;
 
-        private ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             type = (TextView) view.findViewById(R.id.type);
             typeableValue = (EditText) view.findViewById(R.id.typeable_value);
