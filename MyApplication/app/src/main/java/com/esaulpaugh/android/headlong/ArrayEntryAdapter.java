@@ -24,14 +24,14 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
 
     private int colorRed, colorGreen;
 
-    private final ABIType<?> elementType;
+    private final ABIType<Object> elementType;
     private final String elementCanonicalTypeString;
 
     private int elementCategory;
 
     private Integer elementUnderEditPosition;
 
-    public ArrayEntryAdapter(Activity activity, ABIType<?> elementType, int elementCategory, List<Object> list) {
+    public ArrayEntryAdapter(Activity activity, ABIType<Object> elementType, int elementCategory, List<Object> list) {
         this.activity = activity;
         this.colorRed = activity.getResources().getColor(R.color.colorAccent);
         this.colorGreen = activity.getResources().getColor(R.color.colorPrimary);

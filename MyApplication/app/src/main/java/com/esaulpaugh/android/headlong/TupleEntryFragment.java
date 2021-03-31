@@ -31,10 +31,10 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
 
     static class Triple {
 
-        final ABIType<?> abiType;
+        final ABIType<Object> abiType;
         final Object object;
 
-        Triple(ABIType<?> abiType, Object object) {
+        Triple(ABIType<Object> abiType, Object object) {
             this.abiType = abiType;
             this.object = object;
         }
@@ -110,7 +110,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
                 TupleType tt = TupleType.parse(subtupleTypeString);
                 listElements.clear();
                 for(ABIType<?> abiType : tt) {
-                    listElements.add(new Triple(abiType, null));
+                    listElements.add(new Triple((ABIType<Object>) abiType, null));
                 }
                 adapter.notifyDataSetChanged();
 
@@ -137,12 +137,12 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
                     try {
                         Function f = new Function(s.toString());
 
-                        TupleType tt = f.getParamTypes();
+                        TupleType tt = f.getInputs();
 
                         listElements.clear();
 
                         for(ABIType<?> abiType : tt) {
-                            listElements.add(new Triple(abiType, null));
+                            listElements.add(new Triple((ABIType<Object>) abiType, null));
                         }
 
                         adapter.notifyDataSetChanged();

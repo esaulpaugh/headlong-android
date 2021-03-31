@@ -34,7 +34,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
     private boolean forDefaultVal;
     private String arrayTypeString;
 
-    private ABIType<?> elementType;
+    private ABIType<Object> elementType;
 
     private List<Object> listElements;
 
@@ -86,7 +86,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             return view;
         }
 
-        elementType = arrayType.getElementType();
+        elementType = (ABIType<Object>) arrayType.getElementType();
         listElements = new ArrayList<>();
 
         final String elementCanonical = elementType.getCanonicalType();
@@ -245,8 +245,8 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         return view;
     }
 
-    static ArrayType<?, ?> parseArrayType(String typeStr) {
-        return (ArrayType<?, ?>) TypeFactory.create(typeStr);
+    static ArrayType<?, Object> parseArrayType(String typeStr) {
+        return (ArrayType<?, Object>) TypeFactory.create(typeStr, Object.class);
     }
 
     private void refreshList() {
