@@ -20,15 +20,16 @@ import java.util.List;
 
 public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.ViewHolder> {
 
-    private Activity activity;
-    private List<Object> list;
+    private final Activity activity;
+    private final List<Object> list;
 
-    private int colorRed, colorGreen;
+    private final int colorRed;
+    private final int colorGreen;
 
     private final ABIType<Object> elementType;
     private final String elementCanonicalTypeString;
 
-    private int elementCategory;
+    private final int elementCategory;
 
     private Integer elementUnderEditPosition;
 
@@ -145,7 +146,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
         if(valid) {
             try {
                 final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
-                final boolean isString = isArray && ((ArrayType) elementType).isString();
+                final boolean isString = isArray && ((ArrayType<?, ?>) elementType).isString();
                 Object val = ArrayEntryFragment.parseElement(elementType, valString, isString, isArray);
                 elementType.validate(val);
                 if(setText) {
@@ -182,10 +183,10 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
         return list.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView type;
-        private EditText typeableValue;
-        private View editableValue;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView type;
+        private final EditText typeableValue;
+        private final View editableValue;
         private TextWatcher textWatcher;
 
         private ViewHolder(View view) {
