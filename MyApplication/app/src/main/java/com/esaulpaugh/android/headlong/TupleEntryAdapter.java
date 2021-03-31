@@ -128,8 +128,8 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                     } else {
                         try {
                             if(newTriple.abiType.typeCode() == ABIType.TYPE_CODE_ARRAY || newTriple.abiType.typeCode() == ABIType.TYPE_CODE_TUPLE) {
-                                if(newTriple.abiType.clazz().equals(byte[].class)) {
-                                    obj = Strings.decode(argString, Strings.UTF_8);
+                                if(newTriple.abiType.clazz() == (Object) byte[].class) {
+                                    obj = Strings.decode(argString, Strings.HEX);
                                 } else {
                                     obj = null;
                                 }

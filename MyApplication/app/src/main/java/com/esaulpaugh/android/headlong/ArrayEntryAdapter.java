@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.esaulpaugh.headlong.abi.ABIType;
+import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
 
 import java.util.List;
@@ -143,11 +144,14 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<ArrayEntryAdapter.Vi
         boolean valid = valString != null;
         if(valid) {
             try {
-                elementType.parseArgument(valString);
+                final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
+                final boolean isString = isArray && ((ArrayType) elementType).isString();
+                Object val = ArrayEntryFragment.parseElement(elementType, valString, isString, isArray);
+                elementType.validate(val);
                 if(setText) {
                     typeableValueView.setText(valString);
                 }
-            } catch (IllegalArgumentException iae) {
+            } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException iae) {
                 valid = false;
             }
         }

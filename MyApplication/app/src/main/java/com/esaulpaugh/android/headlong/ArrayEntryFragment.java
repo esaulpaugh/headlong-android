@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
-import com.esaulpaugh.headlong.abi.TupleType;
 import com.esaulpaugh.headlong.abi.TypeFactory;
+import com.esaulpaugh.headlong.util.Strings;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -195,8 +195,9 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
 
                     boolean valid = true;
                     try {
-                        elementType.parseArgument(argString);
-                        defaultVal = null;
+                        final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
+                        final boolean isString = isArray && ((ArrayType) elementType).isString();
+                        defaultVal = parseElement(elementType, argString, isString, isArray);
                         defaultValString = argString;
                     } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
                         valid = false;
@@ -362,9 +363,10 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
 
         int i = 0;
         if(elementCategory == CATEGORY_TYPEABLE) {
+            final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
+            final boolean isString = isArray && ((ArrayType) elementType).isString();
             for (Object e : listElements) {
-                array[i++] = elementType.parseArgument((String) e);
-//                        array[i++] = e;
+                array[i++] = parseElement(elementType, (String) e, isString, isArray);
             }
         } else {
             for (Object e : listElements) {
@@ -373,5 +375,13 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
 
         return array;
+    }
+
+    static Object parseElement(ABIType<?> elementType, String val, boolean isString, boolean isArray) {
+        return isString
+                ? val
+                : isArray
+                    ? Strings.decode(val, Strings.HEX)
+                    : elementType.parseArgument(val);
     }
 }
