@@ -84,7 +84,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
     @SuppressWarnings("unchecked")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_array_entry, container, false);
+        final View view = inflater.inflate(R.layout.fragment_array_entry, container, false);
 
         final ArrayType<ABIType<?>, ?> arrayType;
         try {
@@ -103,11 +103,10 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                 ? CATEGORY_TUPLE
                 : elementCanonical.endsWith("]") ? CATEGORY_ARRAY : CATEGORY_TYPEABLE;
 
-        TextView arrayTypeStringView = (TextView) view.findViewById(R.id.array_type_string);
+        final TextView arrayTypeStringView = (TextView) view.findViewById(R.id.array_type_string);
         arrayTypeStringView.setText(arrayTypeString);
 
-        EditText lengthView = (EditText) view.findViewById(R.id.length);
-
+        final EditText lengthView = (EditText) view.findViewById(R.id.length);
         if (arrayType.getLength() != -1) {
             length = arrayType.getLength();
             view.findViewById(R.id.enter_length).setVisibility(View.GONE);
@@ -140,7 +139,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                         valid = false;
                     }
                     if (valid) {
-                        refreshList();
+                        setAllToDefault();
                     } else {
                         Toast.makeText(getActivity(), length < 0 ? "Error: negative length" : "Error: invalid length", Toast.LENGTH_SHORT).show();
                     }
@@ -176,7 +175,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         case CATEGORY_TUPLE:
             if (elementCanonical.equals("()")) {
                 defaultVal = Tuple.EMPTY;
-                refreshList();
+                setAllToDefault();
             } else {
                 defaultValView.setOnClickListener(v -> EditorActivity.startSubtupleActivity(getActivity(), elementCanonical, true));
             }
@@ -215,7 +214,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                         defaultValString = null;
                     }
 
-                    refreshList();
+                    setAllToDefault();
 
                     int colorInt = getResources().getColor(valid ? R.color.colorPrimary : R.color.colorAccent);
                     defaultValView.setBackgroundColor(colorInt);
@@ -227,8 +226,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             throw new Error();
         }
 
-        Button returnArray = (Button) view.findViewById(R.id.return_array);
-
+        final Button returnArray = (Button) view.findViewById(R.id.return_array);
         returnArray.setOnClickListener(v -> {
 
 // TODO handle race conditions
@@ -260,8 +258,8 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         return (ArrayType<?, Object>) TypeFactory.create(typeStr, Object.class);
     }
 
-    private void refreshList() {
-        System.out.println("refreshList()");
+    private void setAllToDefault() {
+        System.out.println("setAllToDefault()");
         listElements.clear();
         if (elementCategory == CATEGORY_TYPEABLE) {
             for (int i = 0; i < length; i++) {
@@ -280,7 +278,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         if (forDefaultVal) {
             defaultValView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             defaultVal = obj;
-            refreshList();
+            setAllToDefault();
         } else {
             try {
                 adapter.returnEditedObject(obj);
