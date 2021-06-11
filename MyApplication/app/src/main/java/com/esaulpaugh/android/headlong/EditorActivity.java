@@ -23,10 +23,6 @@ public class EditorActivity extends Activity {
     static final int CODE_SUBTUPLE = 1;
     static final int CODE_ARRAY = 2;
 
-    private boolean activityForSubtuple;
-
-    private String typeString;
-
     private EntryFragment entryFragment;
 
     @Override
@@ -39,10 +35,9 @@ public class EditorActivity extends Activity {
         System.out.println("===== " + EditorActivity.class.getSimpleName());
 
         Bundle extras = getIntent().getExtras();
-
-        boolean forDefaultVal = extras.getBoolean(FOR_DEFAULT_VAL, false);
-        activityForSubtuple = extras.getBoolean(ARG_ACTIVITY_FOR_SUBTUPLE);
-        typeString = extras.getString(ARG_TYPE_STRING);
+        final boolean forDefaultVal = extras.getBoolean(FOR_DEFAULT_VAL, false);
+        final boolean activityForSubtuple = extras.getBoolean(ARG_ACTIVITY_FOR_SUBTUPLE);
+        final String typeString = extras.getString(ARG_TYPE_STRING);
 
         if(activityForSubtuple) {
             entryFragment = TupleEntryFragment.newInstance(true, typeString, forDefaultVal);

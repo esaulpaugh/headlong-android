@@ -26,10 +26,11 @@ import java.util.List;
 
 public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.ViewHolder> {
 
-    private Activity activity;
-    private List<Triple> list;
+    private final Activity activity;
+    private final List<Triple> list;
 
-    private int colorRed, colorGreen;
+    private final int colorRed;
+    private final int colorGreen;
 
     private int elementUnderEditPosition;
 

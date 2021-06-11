@@ -15,8 +15,6 @@ limitations under the License.
 */
 package com.esaulpaugh.android.headlong;
 
-import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
-
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -27,13 +25,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
-import com.esaulpaugh.headlong.abi.TypeFactory;
 
 import java.nio.ByteBuffer;
+
+import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
 
 public class MainActivity extends Activity {
 
