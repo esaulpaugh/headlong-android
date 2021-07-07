@@ -255,7 +255,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
     }
 
     static ArrayType<?, Object> parseArrayType(String typeStr) {
-        return (ArrayType<?, Object>) TypeFactory.create(typeStr, Object.class);
+        return TypeFactory.create(typeStr);
     }
 
     private void setAllToDefault() {
