@@ -193,7 +193,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         }
     }
 
-    void returnEditedObject(Object obj) {
+    synchronized void returnEditedObject(Object obj) {
         try {
             Triple existing = list.get(elementUnderEditPosition);
             list.set(elementUnderEditPosition, new Triple(existing.abiType, obj));

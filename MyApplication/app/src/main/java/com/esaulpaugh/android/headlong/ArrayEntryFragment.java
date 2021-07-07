@@ -274,7 +274,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
     }
 
     @Override
-    public void returnEditedObject(Object obj, boolean forDefaultVal) {
+    public synchronized void returnEditedObject(Object obj, boolean forDefaultVal) {
         if (forDefaultVal) {
             defaultValView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             defaultVal = obj;

@@ -172,7 +172,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
     }
 
     @Override
-    public void returnEditedObject(Object obj, boolean defaultVal) {
+    public synchronized void returnEditedObject(Object obj, boolean defaultVal) {
         adapter.returnEditedObject(obj);
     }
 
