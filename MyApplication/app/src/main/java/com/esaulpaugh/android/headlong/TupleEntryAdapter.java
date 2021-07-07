@@ -88,14 +88,14 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
             System.out.println("CANONICAL = " + canonical);
 
-            final int code = triple.abiType.typeCode();
-            if(code != ABIType.TYPE_CODE_BOOLEAN
-                    && code != ABIType.TYPE_CODE_ARRAY
-                    && code != ABIType.TYPE_CODE_TUPLE) {
-                holder.typeableValue.setInputType(InputType.TYPE_CLASS_NUMBER);
-            } else {
-                holder.typeableValue.setInputType(InputType.TYPE_CLASS_TEXT);
-            }
+//            final int code = triple.abiType.typeCode();
+//            if(code != ABIType.TYPE_CODE_BOOLEAN
+//                    && code != ABIType.TYPE_CODE_ARRAY
+//                    && code != ABIType.TYPE_CODE_TUPLE) {
+//                holder.typeableValue.setInputType(InputType.TYPE_CLASS_NUMBER);
+//            } else {
+//                holder.typeableValue.setInputType(InputType.TYPE_CLASS_TEXT);
+//            }
 
             holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
                 if(hasFocus) {

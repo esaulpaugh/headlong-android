@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
+import com.esaulpaugh.headlong.abi.UnitType;
 
 import java.util.List;
 
@@ -60,8 +61,10 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
             case ABIType.TYPE_CODE_INT:
             case ABIType.TYPE_CODE_LONG:
             case ABIType.TYPE_CODE_BIG_INTEGER:
-            case ABIType.TYPE_CODE_BIG_DECIMAL:
-                editText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+            case ABIType.TYPE_CODE_BIG_DECIMAL: {
+                UnitType<?> ut = (UnitType<?>) elementType;
+                editText.setInputType(ut.isUnsigned() ? InputType.TYPE_CLASS_NUMBER : InputType.TYPE_NUMBER_FLAG_SIGNED);
+            }
             default: /* skip */
         }
     }
@@ -186,7 +189,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         return list.size();
     }
 
-    void returnEditedObject(Object array) {
+    synchronized void returnEditedObject(Object array) {
         list.set(elementUnderEditPosition, array);
         notifyItemChanged(elementUnderEditPosition);
     }
