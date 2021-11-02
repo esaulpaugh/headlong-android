@@ -6,7 +6,6 @@ import static com.esaulpaugh.android.headlong.TupleEntryFragment.Triple;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
