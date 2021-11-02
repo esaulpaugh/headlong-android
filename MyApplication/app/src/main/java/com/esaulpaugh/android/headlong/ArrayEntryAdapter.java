@@ -79,10 +79,10 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         switch (elementCategory) {
         case ArrayEntryFragment.CATEGORY_TUPLE:
             if(elementCanonicalTypeString.equals("()")) {
-                list.set(holder.getAdapterPosition(), Tuple.EMPTY);
+                list.set(holder.getBindingAdapterPosition(), Tuple.EMPTY);
             } else {
                 holder.editableValue.setOnClickListener(v -> {
-                    elementUnderEditPosition = holder.getAdapterPosition();
+                    elementUnderEditPosition = holder.getBindingAdapterPosition();
                     EditorActivity.startSubtupleActivity(activity, elementCanonicalTypeString, false);
                 });
             }
@@ -92,7 +92,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
             break;
         case ArrayEntryFragment.CATEGORY_ARRAY:
             holder.editableValue.setOnClickListener(v -> {
-                elementUnderEditPosition = holder.getAdapterPosition();
+                elementUnderEditPosition = holder.getBindingAdapterPosition();
                 EditorActivity.startArrayActivity(activity, elementCanonicalTypeString, false);
             });
 
@@ -126,7 +126,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
                     validateTypeable(argString, holder.typeableValue, false);
 
-                    list.set(holder.getAdapterPosition(), argString);
+                    list.set(holder.getBindingAdapterPosition(), argString);
                 }
             };
             holder.typeableValue.addTextChangedListener(holder.textWatcher);
