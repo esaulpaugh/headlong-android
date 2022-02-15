@@ -31,7 +31,7 @@ dependencies {
 
 //    implementation files('libs/headlong-3.7.0.jar')
 
-    implementation 'com.esaulpaugh:headlong:5.7.0'
+    implementation 'com.esaulpaugh:headlong:6.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 //    androidTestImplementation 'com.android.test:runner:1.4.0'
 //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.4.0'
