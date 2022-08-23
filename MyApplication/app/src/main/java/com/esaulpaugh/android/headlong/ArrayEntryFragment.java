@@ -33,12 +33,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.esaulpaugh.headlong.abi.ABIType;
+import com.esaulpaugh.headlong.abi.Address;
 import com.esaulpaugh.headlong.abi.ArrayType;
+import com.esaulpaugh.headlong.abi.BigDecimalType;
+import com.esaulpaugh.headlong.abi.SuperSerial;
 import com.esaulpaugh.headlong.abi.Tuple;
+import com.esaulpaugh.headlong.abi.TupleType;
 import com.esaulpaugh.headlong.abi.TypeFactory;
 import com.esaulpaugh.headlong.util.Strings;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -310,7 +316,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         case "B": {
             byte[] arr = new byte[length];
             for (Object e : listElements) {
-                arr[i++] = (Byte) elementType.parseArgument((String) e);
+                arr[i++] = Byte.parseByte((String) e);
             }
             return arr;
         }
@@ -318,7 +324,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         case "S": {
             short[] arr = new short[length];
             for (Object e : listElements) {
-                arr[i++] = (Short) elementType.parseArgument((String) e);
+                arr[i++] = Short.parseShort((String) e);
             }
             return arr;
         }
@@ -326,7 +332,9 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         case "I": {
             int[] arr = new int[length];
             for (Object e : listElements) {
-                arr[i++] = (Integer) elementType.parseArgument((String) e);
+                Integer val = Integer.parseInt((String) e);
+                elementType.validate(val);
+                arr[i++] = val;
             }
             return arr;
         }
@@ -334,7 +342,9 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         case "J": {
             long[] arr = new long[length];
             for (Object e : listElements) {
-                arr[i++] = (Long) elementType.parseArgument((String) e);
+                Long val = Long.parseLong((String) e);
+                elementType.validate(val);
+                arr[i++] = val;
             }
             return arr;
         }
@@ -342,7 +352,9 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         case "F": {
             float[] arr = new float[length];
             for (Object e : listElements) {
-                arr[i++] = (Float) elementType.parseArgument((String) e);
+                Float f = Float.parseFloat((String) e);
+                elementType.validate(f);
+                arr[i++] = f;
             }
             return arr;
         }
@@ -350,7 +362,9 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         case "D": {
             double[] arr = new double[length];
             for (Object e : listElements) {
-                arr[i++] = (Double) elementType.parseArgument((String) e);
+                Double d = Double.parseDouble((String) e);
+                elementType.validate(d);
+                arr[i++] = d;
             }
             return arr;
         }
@@ -358,7 +372,9 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         case "C": {
             char[] arr = new char[length];
             for (Object e : listElements) {
-                arr[i++] = (Character) elementType.parseArgument((String) e);
+                Character c = ((String) e).charAt(0);
+                elementType.validate(c);
+                arr[i++] = c;
             }
             return arr;
         }
@@ -366,7 +382,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         case "Z": {
             boolean[] arr = new boolean[length];
             for (Object e : listElements) {
-                arr[i++] = (Boolean) elementType.parseArgument((String) e);
+                arr[i++] = Boolean.parseBoolean((String) e);
             }
             return arr;
         }
@@ -405,6 +421,25 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                 ? val
                 : isArray
                     ? Strings.decode(val, Strings.HEX)
-                    : elementType.parseArgument(val);
+                    : parseArgument(elementType, val);
+    }
+
+    @SuppressWarnings("unchecked")
+    static Object parseArgument(ABIType<?> elementType, String val) {
+        final Object x;
+        switch (elementType.typeCode()) {
+            case ABIType.TYPE_CODE_BOOLEAN: x = Boolean.parseBoolean(val); break;
+            case ABIType.TYPE_CODE_BYTE: x = Byte.parseByte(val); break;
+            case ABIType.TYPE_CODE_INT: x = Integer.parseInt(val); break;
+            case ABIType.TYPE_CODE_LONG: x = Long.parseLong(val); break;
+            case ABIType.TYPE_CODE_BIG_INTEGER: x = new BigInteger(val); break;
+            case ABIType.TYPE_CODE_BIG_DECIMAL: x = new BigDecimal(new BigInteger(val, 10), ((BigDecimalType) elementType).getScale()); break;
+            case ABIType.TYPE_CODE_ARRAY: x = SuperSerial.deserializeArray((ArrayType<? extends ABIType<?>, ? extends Object>) elementType, val, false); break;
+            case ABIType.TYPE_CODE_TUPLE: x = SuperSerial.deserialize((TupleType) elementType, val, false); break;
+            case ABIType.TYPE_CODE_ADDRESS: x = Address.wrap(val); break;
+            default: throw new AssertionError();
+        }
+        ((ABIType<Object>) elementType).validate(x);
+        return x;
     }
 }

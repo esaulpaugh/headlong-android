@@ -210,7 +210,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         }
 
         if (forSubtuple) {
-            final Tuple subtuple = new Tuple(args);
+            final Tuple subtuple = Tuple.of(args);
             final Intent intent = new Intent();
             try {
                 intent.putExtra(TupleEntryFragment.ARG_SUBTUPLE_TYPE_STRING, subtupleTypeString);
@@ -229,7 +229,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
             }
         } else {
             System.out.println("setting masterTuple");
-            this.masterTuple = new Tuple(args);
+            this.masterTuple = Tuple.of(args);
             this.functionSignature = enterSignature.getText().toString();
         }
     }

@@ -159,7 +159,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                                     obj = null;
                                 }
                             } else {
-                                obj = newTriple.abiType.parseArgument(argString);
+                                obj = ArrayEntryFragment.parseArgument(newTriple.abiType, argString);
                             }
                         } catch (IllegalArgumentException | UnsupportedOperationException iae) {
                             obj = null;
