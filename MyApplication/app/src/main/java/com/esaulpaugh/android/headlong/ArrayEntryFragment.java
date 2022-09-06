@@ -434,8 +434,6 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             case ABIType.TYPE_CODE_LONG: x = Long.parseLong(val); break;
             case ABIType.TYPE_CODE_BIG_INTEGER: x = new BigInteger(val); break;
             case ABIType.TYPE_CODE_BIG_DECIMAL: x = new BigDecimal(new BigInteger(val, 10), ((BigDecimalType) elementType).getScale()); break;
-            case ABIType.TYPE_CODE_ARRAY: x = SuperSerial.deserializeArray((ArrayType<? extends ABIType<?>, ? extends Object>) elementType, val, false); break;
-            case ABIType.TYPE_CODE_TUPLE: x = SuperSerial.deserialize((TupleType) elementType, val, false); break;
             case ABIType.TYPE_CODE_ADDRESS: x = Address.wrap(val); break;
             default: throw new AssertionError();
         }
