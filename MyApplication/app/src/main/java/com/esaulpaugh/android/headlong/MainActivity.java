@@ -81,7 +81,7 @@ public class MainActivity extends Activity {
             ByteBuffer bb = f.encodeCall(masterTuple);
 
             byte[] arr = bb.array();
-            String formatted = Function.formatCall(arr, 0, arr.length);
+            String formatted = Function.formatCall(arr);
 
             output.setText(formatted);
 
