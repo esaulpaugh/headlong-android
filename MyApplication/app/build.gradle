@@ -26,6 +26,7 @@ android {
         }
     }
     buildToolsVersion = '30.0.3'
+    namespace 'com.esaulpaugh.android.headlong'
 }
 
 dependencies {
