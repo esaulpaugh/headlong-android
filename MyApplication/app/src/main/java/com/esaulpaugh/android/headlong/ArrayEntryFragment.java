@@ -36,9 +36,7 @@ import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.Address;
 import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.BigDecimalType;
-import com.esaulpaugh.headlong.abi.SuperSerial;
 import com.esaulpaugh.headlong.abi.Tuple;
-import com.esaulpaugh.headlong.abi.TupleType;
 import com.esaulpaugh.headlong.abi.TypeFactory;
 import com.esaulpaugh.headlong.util.Strings;
 
