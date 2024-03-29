@@ -167,7 +167,7 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         if(valid) {
             try {
                 final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
-                final boolean isString = isArray && ((ArrayType<?, ?>) elementType).isString();
+                final boolean isString = isArray && ((ArrayType<?, ?, ?>) elementType).isString();
                 Object val = ArrayEntryFragment.parseElement(elementType, valString, isString, isArray);
                 elementType.validate(val);
                 if(setText) {

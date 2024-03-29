@@ -123,7 +123,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
             tupleTypeString.setText(subtupleTypeString);
 
             try {
-                TupleType tt = TupleType.parse(subtupleTypeString);
+                TupleType<Tuple> tt = TupleType.parse(subtupleTypeString);
                 listElements.clear();
                 for(ABIType<?> abiType : tt) {
                     listElements.add(new Triple((ABIType<Object>) abiType, null));
@@ -153,7 +153,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
                     try {
                         Function f = new Function(s.toString());
 
-                        TupleType tt = f.getInputs();
+                        TupleType<Tuple> tt = f.getInputs();
 
                         listElements.clear();
 
@@ -210,12 +210,12 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         }
 
         if (forSubtuple) {
-            final Tuple subtuple = Tuple.of(args);
+            final Tuple subtuple = Tuple.from(args);
             final Intent intent = new Intent();
             try {
                 intent.putExtra(TupleEntryFragment.ARG_SUBTUPLE_TYPE_STRING, subtupleTypeString);
 
-                TupleType tt = TupleType.parse(subtupleTypeString);
+                TupleType<Tuple> tt = TupleType.parse(subtupleTypeString);
                 byte[] tupleBytes = tt.encode(subtuple).array();
 
                 intent.putExtra(FOR_DEFAULT_VAL, forDefaultVal);
@@ -229,7 +229,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
             }
         } else {
             System.out.println("setting masterTuple");
-            this.masterTuple = Tuple.of(args);
+            this.masterTuple = Tuple.from(args);
             this.functionSignature = enterSignature.getText().toString();
         }
     }

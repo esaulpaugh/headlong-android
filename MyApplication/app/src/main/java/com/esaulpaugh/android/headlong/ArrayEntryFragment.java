@@ -93,7 +93,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
 
     static void setHint(EditText editText, ABIType<?> type) {
         if(type.typeCode() == ABIType.TYPE_CODE_ARRAY) {
-            editText.setHint(((ArrayType<?, ?>) type).isString() ? "UTF-8" : "Hex");
+            editText.setHint(((ArrayType<?, ?, ?>) type).isString() ? "UTF-8" : "Hex");
         } else {
             editText.setHint("Value");
         }
@@ -105,9 +105,9 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_array_entry, container, false);
 
-        final ArrayType<ABIType<?>, ?> arrayType;
+        final ArrayType<ABIType<?>, ?, ?> arrayType;
         try {
-            arrayType = (ArrayType<ABIType<?>, ?>) TypeFactory.create(arrayTypeString);
+            arrayType = (ArrayType<ABIType<?>, ?, ?>) TypeFactory.create(arrayTypeString);
         } catch (IllegalArgumentException iae) {
             Toast.makeText(getActivity(), iae.getMessage(), Toast.LENGTH_LONG).show();
             return view;
@@ -224,7 +224,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
                     boolean valid = true;
                     try {
                         final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
-                        final boolean isString = isArray && ((ArrayType<?, ?>) elementType).isString();
+                        final boolean isString = isArray && ((ArrayType<?, ?, ?>) elementType).isString();
                         defaultVal = parseElement(elementType, argString, isString, isArray);
                         defaultValString = argString;
                     } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
@@ -273,7 +273,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         return view;
     }
 
-    static ArrayType<?, Object> parseArrayType(String typeStr) {
+    static ArrayType<ABIType<Object>, Object, Object> parseArrayType(String typeStr) {
         return TypeFactory.create(typeStr);
     }
 
@@ -307,7 +307,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    private Object createArray(ArrayType<?, ?> arrayType, int length) {
+    private Object createArray(ArrayType<?, ?, ?> arrayType, int length) {
         int i = 0;
         switch (arrayType.getElementType().clazz().getName()) {
         case "java.lang.Byte":
@@ -395,13 +395,13 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    private Object[] createObjectArray(ArrayType<?, ?> arrayType) {
+    private Object[] createObjectArray(ArrayType<?, ?, ?> arrayType) {
         Object[] array = (Object[]) Array.newInstance(arrayType.getElementType().clazz(), length);
 
         int i = 0;
         if(elementCategory == CATEGORY_TYPEABLE) {
             final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
-            final boolean isString = isArray && ((ArrayType<?, ?>) elementType).isString();
+            final boolean isString = isArray && ((ArrayType<?, ?, ?>) elementType).isString();
             for (Object e : listElements) {
                 array[i++] = parseElement(elementType, (String) e, isString, isArray);
             }

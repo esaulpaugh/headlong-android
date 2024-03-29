@@ -148,7 +148,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
                     Object obj;
                     final boolean isArray = newTriple.abiType.typeCode() == ABIType.TYPE_CODE_ARRAY;
-                    if (isArray && ((ArrayType<ABIType<?>, ?>) newTriple.abiType).isString()) {
+                    if (isArray && ((ArrayType<ABIType<?>, ?, ?>) newTriple.abiType).isString()) {
                         obj = argString;
                     } else {
                         try {
