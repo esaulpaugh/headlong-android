@@ -87,7 +87,9 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                     EditorActivity.startSubtupleActivity(activity, canonical, false);
                 });
             }
-            validate(list.get(holder.getBindingAdapterPosition()), holder.editableValue);
+            if (validate(triple, holder.editableValue)) {
+                list.set(position, triple);
+            }
             holder.typeableValue.setVisibility(View.INVISIBLE);
             holder.editableValue.setVisibility(View.VISIBLE);
         } else if (canonical.endsWith("]")) {
@@ -96,7 +98,9 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                 elementUnderEditPosition = holder.getBindingAdapterPosition();
                 EditorActivity.startArrayActivity(activity, canonical, false);
             });
-            validate(triple, holder.editableValue);
+            if (validate(triple, holder.editableValue)) {
+                list.set(position, triple);
+            }
             holder.typeableValue.setVisibility(View.INVISIBLE);
             holder.editableValue.setVisibility(View.VISIBLE);
         } else {
@@ -121,9 +125,9 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
             holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
                 if(hasFocus) {
-                    int pos = holder.getBindingAdapterPosition();
-                    Triple ttt = list.get(pos);
-                    validate(ttt, holder.typeableValue);
+                    if (validate(triple, holder.typeableValue)) {
+                        list.set(position, triple);
+                    }
                 }
             });
 
@@ -181,7 +185,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         }
     }
 
-    private void validate(Triple triple, View valueView) {
+    private boolean validate(Triple triple, View valueView) {
         boolean valid = triple.object != null;
         if(valid) {
             try {
@@ -194,6 +198,8 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         System.out.println("T validate() = " + valid);
 
         valueView.setBackgroundColor(valid ? colorGreen : colorRed);
+
+        return valid;
     }
 
     @Override
@@ -215,11 +221,11 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         }
     }
 
-    synchronized void returnEditedObject(Object obj) {
+    synchronized void returnEdited(Object obj) {
         try {
             Triple existing = list.get(elementUnderEditPosition);
             list.set(elementUnderEditPosition, new Triple(existing.abiType, obj));
-            notifyItemChanged(elementUnderEditPosition);
+            notifyItemChanged(elementUnderEditPosition, null);
         } catch (IndexOutOfBoundsException ioobe) {
             Toast.makeText(activity, ioobe.getMessage(), Toast.LENGTH_LONG).show();
         }
