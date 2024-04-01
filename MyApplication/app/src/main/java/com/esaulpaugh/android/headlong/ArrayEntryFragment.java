@@ -20,6 +20,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -205,7 +206,14 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
             });
             break;
         case CATEGORY_TYPEABLE: {
-            ((EditText) defaultValView).addTextChangedListener(new TextWatcher() {
+            final EditText box = (EditText) defaultValView;
+            switch (arrayType.getElementType().typeCode()) {
+                case ABIType.TYPE_CODE_INT:
+                case ABIType.TYPE_CODE_LONG:
+                case ABIType.TYPE_CODE_BIG_INTEGER:
+                case ABIType.TYPE_CODE_BIG_DECIMAL: box.setInputType(InputType.TYPE_CLASS_NUMBER);
+            }
+            box.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 

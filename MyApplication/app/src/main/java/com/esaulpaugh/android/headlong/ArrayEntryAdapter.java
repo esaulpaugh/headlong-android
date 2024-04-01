@@ -71,17 +71,28 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
     }
 
     static void setEditTextAttributes(EditText editText, ABIType<?> elementType) {
+        int inputType = InputType.TYPE_CLASS_NUMBER;
         switch (elementType.typeCode()) {
             case ABIType.TYPE_CODE_BYTE:
             case ABIType.TYPE_CODE_INT:
             case ABIType.TYPE_CODE_LONG:
-            case ABIType.TYPE_CODE_BIG_INTEGER:
-            case ABIType.TYPE_CODE_BIG_DECIMAL: {
-                UnitType<?> ut = (UnitType<?>) elementType;
-                editText.setInputType(ut.isUnsigned() ? InputType.TYPE_CLASS_NUMBER : InputType.TYPE_NUMBER_FLAG_SIGNED);
+            case ABIType.TYPE_CODE_BIG_INTEGER: {
+                if (!((UnitType<?>) elementType).isUnsigned()) {
+                    inputType |= InputType.TYPE_NUMBER_FLAG_SIGNED;
+                }
+                break;
             }
-            default: /* skip */
+            case ABIType.TYPE_CODE_BIG_DECIMAL: {
+                inputType |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
+                if (!((UnitType<?>) elementType).isUnsigned()) {
+                    inputType |= InputType.TYPE_NUMBER_FLAG_SIGNED;
+                }
+                break;
+            }
+            default:
+                inputType = InputType.TYPE_CLASS_TEXT;
         }
+        editText.setInputType(inputType);
     }
 
     @Override
