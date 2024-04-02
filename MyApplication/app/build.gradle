@@ -25,7 +25,7 @@ android {
             excludes += ['META-INF/LICENSE.md', 'META-INF/LICENSE-notice.md']
         }
     }
-    buildToolsVersion = '30.0.3'
+//    buildToolsVersion = '30.0.3'
     namespace 'com.esaulpaugh.android.headlong'
 }
 
