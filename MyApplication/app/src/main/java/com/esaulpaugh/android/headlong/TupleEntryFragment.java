@@ -42,6 +42,7 @@ import java.util.List;
 import static com.esaulpaugh.android.headlong.EditorActivity.ENCODED_TUPLE_BYTES;
 import static com.esaulpaugh.android.headlong.EditorActivity.FOR_DEFAULT_VAL;
 
+@SuppressWarnings("deprecation")
 public class TupleEntryFragment extends Fragment implements EntryFragment {
 
     static class Triple {
@@ -49,8 +50,9 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         final ABIType<Object> abiType;
         final Object object;
 
-        Triple(ABIType<Object> abiType, Object object) {
-            this.abiType = abiType;
+        @SuppressWarnings("unchecked")
+        Triple(ABIType<?> abiType, Object object) {
+            this.abiType = (ABIType<Object>) abiType;
             this.object = object;
         }
     }
@@ -122,17 +124,7 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
             tupleTypeString.setVisibility(View.VISIBLE);
             tupleTypeString.setText(subtupleTypeString);
 
-            try {
-                TupleType<Tuple> tt = TupleType.parse(subtupleTypeString);
-                listElements.clear();
-                for(ABIType<?> abiType : tt) {
-                    listElements.add(new Triple((ABIType<Object>) abiType, null));
-                }
-                adapter.notifyDataSetChanged();
-
-            } catch (IllegalArgumentException iae) {
-                Toast.makeText(getActivity(), iae.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            replaceData(subtupleTypeString);
         } else {
             enterSignature.setVisibility(View.VISIBLE);
             tupleTypeString.setVisibility(View.GONE);
@@ -150,32 +142,28 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    try {
-                        Function f = new Function(s.toString());
-
-                        TupleType<Tuple> tt = f.getInputs();
-
-                        listElements.clear();
-
-                        for(ABIType<?> abiType : tt) {
-                            listElements.add(new Triple((ABIType<Object>) abiType, null));
-                        }
-
-                        adapter.notifyDataSetChanged();
-
-                    } catch (RuntimeException re) {
-                        listElements.clear();
-                        adapter.notifyDataSetChanged();
-                    }
+                    replaceData(s.toString());
                 }
             });
         }
 
-        returnTuple.setOnClickListener(v -> {
-            complete();
-        });
+        returnTuple.setOnClickListener(v -> complete());
 
         return view;
+    }
+
+    @SuppressWarnings("NotifyDataSetChanged")
+    private void replaceData(String signature) {
+        listElements.clear();
+        try {
+            for(ABIType<?> abiType : new Function(signature).getInputs()) {
+                listElements.add(new Triple(abiType, null));
+            }
+        } catch (RuntimeException re) {
+            // do nothing
+        } finally {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public String getFunctionSignature() {
