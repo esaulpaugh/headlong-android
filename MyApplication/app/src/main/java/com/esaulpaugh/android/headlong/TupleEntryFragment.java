@@ -15,6 +15,9 @@ limitations under the License.
 */
 package com.esaulpaugh.android.headlong;
 
+import static com.esaulpaugh.android.headlong.EditorActivity.ENCODED_TUPLE_BYTES;
+import static com.esaulpaugh.android.headlong.EditorActivity.FOR_DEFAULT_VAL;
+
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,9 +40,6 @@ import com.esaulpaugh.headlong.abi.TupleType;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.esaulpaugh.android.headlong.EditorActivity.ENCODED_TUPLE_BYTES;
-import static com.esaulpaugh.android.headlong.EditorActivity.FOR_DEFAULT_VAL;
 
 @SuppressWarnings("deprecation")
 public class TupleEntryFragment extends Fragment implements EntryFragment {

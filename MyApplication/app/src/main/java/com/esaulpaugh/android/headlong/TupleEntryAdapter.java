@@ -33,7 +33,6 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.esaulpaugh.headlong.abi.ABIType;
-import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.util.Strings;
 
@@ -72,7 +71,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
         final String canonical = triple.abiType.getCanonicalType();
 
-        holder.type.setText(canonical + ", " + MainActivity.friendlyClassName(triple.abiType.clazz(), null));
+        holder.type.setText(canonical + ", " + MainActivity.friendlyClassName(triple.abiType));
 
         holder.typeableValue.setText("");
         ArrayEntryAdapter.setEditTextAttributes(holder.typeableValue, triple.abiType);

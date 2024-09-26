@@ -189,7 +189,7 @@ public class ArrayEntryFragment extends Fragment implements EntryFragment {
         adapter = new ArrayEntryAdapter(getActivity(), elementType, elementCategory, listElements);
         recyclerView.setAdapter(adapter);
 
-        type.setText("Set all, " + elementCanonical + ", " + MainActivity.friendlyClassName(elementType.clazz(), null));
+        type.setText("Set all, " + elementCanonical + ", " + MainActivity.friendlyClassName(elementType));
 
         switch (elementCategory) {
         case CATEGORY_TUPLE:

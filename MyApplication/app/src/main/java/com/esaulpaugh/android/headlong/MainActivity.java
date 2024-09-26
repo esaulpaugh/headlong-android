@@ -15,6 +15,8 @@ limitations under the License.
 */
 package com.esaulpaugh.android.headlong;
 
+import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
+
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -25,13 +27,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.esaulpaugh.headlong.abi.ABIType;
+import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
 
 import java.nio.ByteBuffer;
-
-import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
+import java.util.regex.Pattern;
 
 public class MainActivity extends Activity {
 
@@ -114,39 +117,10 @@ public class MainActivity extends Activity {
         }
     }
 
-    static String friendlyClassName(Class<?> clazz, Integer arrayLength) {
-        final String className = clazz.getName();
+    private static final Pattern BRACKETS = Pattern.compile(Pattern.quote("[]"));
 
-        final int split = className.lastIndexOf('[') + 1;
-        final boolean hasArraySuffix = split > 0;
-        final String base = hasArraySuffix ? className.substring(split) : className;
-        final StringBuilder sb = new StringBuilder();
-        switch (base) {
-        case "B": sb.append("byte"); break;
-        case "S": sb.append("short"); break;
-        case "I": sb.append("int"); break;
-        case "J": sb.append("long"); break;
-        case "F": sb.append("float"); break;
-        case "D": sb.append("double"); break;
-        case "C": sb.append("char"); break;
-        case "Z": sb.append("boolean"); break;
-        default: {
-            int lastDotIndex = base.lastIndexOf('.');
-            if(lastDotIndex != -1) {
-                sb.append(base, lastDotIndex + 1, base.length() - (base.charAt(0) == 'L' ? 1 : 0));
-            }
-        }
-        }
-        if(hasArraySuffix) {
-            int i = 0;
-            if(arrayLength != null && arrayLength >= 0) {
-                sb.append('[').append(arrayLength).append(']');
-                i++;
-            }
-            for ( ; i < split; i++) {
-                sb.append("[]");
-            }
-        }
-        return sb.toString();
+    static String friendlyClassName(ABIType<?> type) {
+        final int arrayLen = type instanceof ArrayType ? type.asArrayType().getLength() : -1;
+        return BRACKETS.matcher(type.clazz().getSimpleName()).replaceFirst("[" + (arrayLen == ArrayType.DYNAMIC_LENGTH ? "" : "" + arrayLen) + "]");
     }
 }
