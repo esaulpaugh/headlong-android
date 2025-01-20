@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 34
+    compileSdk 35
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     defaultConfig {
         applicationId "com.esaulpaugh.android.headlong"
-        minSdkVersion 20
-        targetSdkVersion 34
+        minSdkVersion 21
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -34,7 +34,7 @@ dependencies {
 //    implementation files('libs/headlong-3.7.0.jar')
 
     implementation 'com.esaulpaugh:headlong:12.3.3'
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
 //    androidTestImplementation 'com.android.test:runner:1.4.0'
 //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.4.0'
 }
