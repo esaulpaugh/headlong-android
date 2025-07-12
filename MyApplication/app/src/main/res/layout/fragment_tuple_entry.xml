@@ -1,10 +1,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linear"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/holo_green_light">
+    android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/enter_signature"
@@ -12,6 +10,8 @@
         android:layout_height="40dp"
         android:textSize="16sp"
         android:hint="Function signature"
+        android:textColor="#000000"
+        android:textColorHint="#404040"
         android:singleLine="true"
         android:inputType="textNoSuggestions|textVisiblePassword" />
 
@@ -19,7 +19,8 @@
         android:id="@+id/tuple_type_string"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textColor="#000000"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

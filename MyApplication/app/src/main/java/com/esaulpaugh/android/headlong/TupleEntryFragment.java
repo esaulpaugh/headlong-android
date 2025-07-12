@@ -30,7 +30,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -103,7 +102,6 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_tuple_entry, container, false);
@@ -112,13 +110,6 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         enterSignature = (EditText) view.findViewById(R.id.enter_signature);
         TextView tupleTypeString = (TextView) view.findViewById(R.id.tuple_type_string);
-
-        View root = view.findViewById(R.id.linear);
-        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-            int top = insets.getSystemWindowInsetTop();
-            v.setPadding(0, top, 0, 0);
-            return insets.consumeSystemWindowInsets();
-        });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

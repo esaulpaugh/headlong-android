@@ -47,6 +47,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class ArrayEntryFragment extends Fragment implements EntryFragment {
     private static final String ARG_FOR_DEFAULT_VAL = "for_default_val";
     static final String ARG_ARRAY_TYPE_STRING = "array_type_string";
