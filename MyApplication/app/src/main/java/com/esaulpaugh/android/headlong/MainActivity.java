@@ -66,8 +66,8 @@ public class MainActivity extends Activity {
 
         tupleEntryFragment = TupleEntryFragment.newInstance();
 
-        FragmentManager fm = getFragmentManager(); // getSupportFragmentManager
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        // getSupportFragmentManager
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frag_frame, tupleEntryFragment);
         fragmentTransaction.commit();
 

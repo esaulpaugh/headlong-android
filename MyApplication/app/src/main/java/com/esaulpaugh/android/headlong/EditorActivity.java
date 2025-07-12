@@ -18,7 +18,6 @@ package com.esaulpaugh.android.headlong;
 import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -61,8 +60,7 @@ public class EditorActivity extends Activity {
             entryFragment = ArrayEntryFragment.newInstance(forDefaultVal, typeString);
         }
 
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.editor_frame, entryFragment);
         fragmentTransaction.commit();
     }

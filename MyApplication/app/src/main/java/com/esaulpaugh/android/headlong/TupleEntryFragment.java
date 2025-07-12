@@ -18,7 +18,6 @@ package com.esaulpaugh.android.headlong;
 import static com.esaulpaugh.android.headlong.EditorActivity.ENCODED_TUPLE_BYTES;
 import static com.esaulpaugh.android.headlong.EditorActivity.FOR_DEFAULT_VAL;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;

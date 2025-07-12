@@ -77,16 +77,17 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
         if(canonical.startsWith("(") && canonical.endsWith(")")) {
 
+            if (validate(triple, holder.editableValue)) {
+                list.set(position, triple);
+            }
             if(canonical.equals("()")) {
                 list.set(holder.getBindingAdapterPosition(), new Triple(triple.abiType, Tuple.EMPTY));
+                holder.editableValue.setBackgroundColor(colorGreen);
             } else {
                 holder.editableValue.setOnClickListener(v -> {
                     elementUnderEditPosition = holder.getBindingAdapterPosition();
                     EditorActivity.startSubtupleActivity(activity, canonical, false);
                 });
-            }
-            if (validate(triple, holder.editableValue)) {
-                list.set(position, triple);
             }
             holder.typeableValue.setVisibility(View.INVISIBLE);
             holder.editableValue.setVisibility(View.VISIBLE);

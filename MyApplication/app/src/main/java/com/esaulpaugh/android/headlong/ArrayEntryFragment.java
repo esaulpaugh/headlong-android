@@ -16,7 +16,6 @@ limitations under the License.
 package com.esaulpaugh.android.headlong;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
