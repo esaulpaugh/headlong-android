@@ -1,58 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear"
     android:orientation="vertical"
-    android:background="@android:color/holo_green_light"
-    tools:context=".TupleEntryFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_green_light">
 
-    <LinearLayout
-        android:id="@+id/header"
+    <EditText
+        android:id="@+id/enter_signature"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="40dp"
+        android:textSize="16sp"
+        android:hint="Function signature"
+        android:singleLine="true"
+        android:inputType="textNoSuggestions|textVisiblePassword" />
 
-        <EditText
-            android:id="@+id/enter_signature"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:textSize="16sp"
-            android:hint="Function signature"
-            android:singleLine="true"
-            android:inputType="textNoSuggestions|textVisiblePassword" />
-
-        <TextView
-            android:id="@+id/tuple_type_string"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:textSize="16sp" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tuple_type_string"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="16sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_below="@id/header"
-        android:background="@android:color/holo_red_light"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="20dp"
-        android:scrollbars="vertical" />
-
-    <!--<EditText-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="40dp"-->
-    <!--android:textSize="16sp"-->
-    <!--android:hint="Arguments"/>-->
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:minHeight="4dp"
+        android:scrollbars="vertical"
+        android:background="@android:color/holo_red_light" />
 
     <Button
         android:id="@+id/return_tuple"
-        android:layout_below="@id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@android:color/holo_green_dark"
         android:text="ENTER"
         android:textColor="@android:color/white" />
-
-</RelativeLayout>
+</LinearLayout>

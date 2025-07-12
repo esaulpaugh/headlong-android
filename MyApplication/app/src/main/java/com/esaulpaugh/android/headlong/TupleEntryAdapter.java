@@ -73,7 +73,6 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
         holder.type.setText(canonical + ", " + MainActivity.friendlyClassName(triple.abiType));
 
-        holder.typeableValue.setText("");
         ArrayEntryAdapter.setEditTextAttributes(holder.typeableValue, triple.abiType);
 
         if(canonical.startsWith("(") && canonical.endsWith(")")) {
@@ -131,6 +130,11 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
             });
 
             holder.typeableValue.removeTextChangedListener(holder.textWatcher);
+
+            Object val = triple.object;
+            String text = val == null ? "" : val.toString();
+            holder.typeableValue.setText(text);
+
             holder.textWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

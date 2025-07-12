@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -111,6 +112,15 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         enterSignature = (EditText) view.findViewById(R.id.enter_signature);
         TextView tupleTypeString = (TextView) view.findViewById(R.id.tuple_type_string);
+
+        View root = view.findViewById(R.id.linear); // give your LinearLayout an id
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            // Apply only the top inset to avoid content behind status bar
+            int top = insets.getSystemWindowInsetTop();
+            v.setPadding(0, top, 0, 0); // no bottom inset
+            return insets.consumeSystemWindowInsets(); // or return insets if you want to propagate
+        });
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
