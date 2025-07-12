@@ -20,9 +20,15 @@ import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,10 +49,14 @@ public class MainActivity extends Activity {
     private TupleEntryFragment tupleEntryFragment;
     private TextView output;
 
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        postWave(findViewById(R.id.relative), getContentResolver(), handler);
 
         setTitle("headlong demo");
 
@@ -122,5 +132,36 @@ public class MainActivity extends Activity {
     static String friendlyClassName(ABIType<?> type) {
         final int arrayLen = type instanceof ArrayType ? type.asArrayType().getLength() : -1;
         return BRACKETS.matcher(type.clazz().getSimpleName()).replaceFirst("[" + (arrayLen == ArrayType.DYNAMIC_LENGTH ? "" : "" + arrayLen) + "]");
+    }
+
+    private static void postWave(View view, ContentResolver cr, Handler handler) {
+        try {
+            if (Settings.Secure.getInt(cr, "navigation_mode", -1) != 2) return;
+        } catch (Exception ignored) {
+        }
+        final int color1 = Color.parseColor("#797979");
+        final int color2 = Color.parseColor("#8c8c8c");
+        final int durationMs = 6000;
+        final int frameRate = 16;
+
+        final Runnable fadeCycle = new Runnable() {
+            final long startTime = System.currentTimeMillis();
+
+            @Override
+            public void run() {
+                long elapsed = System.currentTimeMillis() - startTime;
+                float fraction = (elapsed % durationMs) / (float) durationMs; // 0..1
+                float sineFrac = (float) ((Math.sin(fraction * 2 * Math.PI) + 1) / 2);
+
+                int r = (int) (Color.red(color1) * (1 - sineFrac) + Color.red(color2) * sineFrac);
+                int g = (int) (Color.green(color1) * (1 - sineFrac) + Color.green(color2) * sineFrac);
+                int b = (int) (Color.blue(color1) * (1 - sineFrac) + Color.blue(color2) * sineFrac);
+
+                view.setBackgroundColor(Color.rgb(r, g, b));
+                handler.postDelayed(this, frameRate);
+            }
+        };
+
+        handler.post(fadeCycle);
     }
 }
