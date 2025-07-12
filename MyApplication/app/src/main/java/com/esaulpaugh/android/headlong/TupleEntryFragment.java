@@ -113,14 +113,12 @@ public class TupleEntryFragment extends Fragment implements EntryFragment {
         enterSignature = (EditText) view.findViewById(R.id.enter_signature);
         TextView tupleTypeString = (TextView) view.findViewById(R.id.tuple_type_string);
 
-        View root = view.findViewById(R.id.linear); // give your LinearLayout an id
+        View root = view.findViewById(R.id.linear);
         ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-            // Apply only the top inset to avoid content behind status bar
             int top = insets.getSystemWindowInsetTop();
-            v.setPadding(0, top, 0, 0); // no bottom inset
-            return insets.consumeSystemWindowInsets(); // or return insets if you want to propagate
+            v.setPadding(0, top, 0, 0);
+            return insets.consumeSystemWindowInsets();
         });
-
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
