@@ -210,7 +210,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         return list.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView type;
         final EditText typeableValue;
         final View editableValue;

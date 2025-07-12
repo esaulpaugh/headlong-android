@@ -42,6 +42,7 @@ import com.esaulpaugh.headlong.abi.TupleType;
 import java.nio.ByteBuffer;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -141,8 +142,8 @@ public class MainActivity extends Activity {
         }
         final int color1 = Color.parseColor("#797979");
         final int color2 = Color.parseColor("#8c8c8c");
-        final int durationMs = 6000;
-        final int frameRate = 16;
+        final int sineMillis = 6000;
+        final int frameMillis = 1000 / 60;
 
         final Runnable fadeCycle = new Runnable() {
             final long startTime = System.currentTimeMillis();
@@ -150,7 +151,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 long elapsed = System.currentTimeMillis() - startTime;
-                float fraction = (elapsed % durationMs) / (float) durationMs; // 0..1
+                float fraction = (elapsed % sineMillis) / (float) sineMillis; // 0..1
                 float sineFrac = (float) ((Math.sin(fraction * 2 * Math.PI) + 1) / 2);
 
                 int r = (int) (Color.red(color1) * (1 - sineFrac) + Color.red(color2) * sineFrac);
@@ -158,7 +159,7 @@ public class MainActivity extends Activity {
                 int b = (int) (Color.blue(color1) * (1 - sineFrac) + Color.blue(color2) * sineFrac);
 
                 view.setBackgroundColor(Color.rgb(r, g, b));
-                handler.postDelayed(this, frameRate);
+                handler.postDelayed(this, frameMillis);
             }
         };
 

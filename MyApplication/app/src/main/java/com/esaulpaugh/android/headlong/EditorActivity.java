@@ -27,6 +27,7 @@ import android.os.Bundle;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
 
+@SuppressWarnings("deprecation")
 public class EditorActivity extends Activity {
 
     static final String ARG_ACTIVITY_FOR_SUBTUPLE = "activity_for_subtuple";
@@ -62,7 +63,7 @@ public class EditorActivity extends Activity {
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.editor_frame, (Fragment) entryFragment);
+        fragmentTransaction.replace(R.id.editor_frame, entryFragment);
         fragmentTransaction.commit();
     }
 

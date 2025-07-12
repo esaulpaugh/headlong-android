@@ -15,8 +15,11 @@ limitations under the License.
 */
 package com.esaulpaugh.android.headlong;
 
-public interface EntryFragment {
+import android.app.Fragment;
 
-    void returnEditedObject(Object obj, boolean defaultVal);
+@SuppressWarnings("deprecation")
+public abstract class EntryFragment extends Fragment {
+
+    abstract void returnEditedObject(Object obj, boolean defaultVal);
 
 }

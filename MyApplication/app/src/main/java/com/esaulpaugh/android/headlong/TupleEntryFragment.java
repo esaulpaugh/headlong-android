@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class TupleEntryFragment extends Fragment implements EntryFragment {
+public class TupleEntryFragment extends EntryFragment {
 
     static class Triple {
 
