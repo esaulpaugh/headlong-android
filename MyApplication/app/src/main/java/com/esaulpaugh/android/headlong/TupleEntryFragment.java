@@ -43,7 +43,7 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class TupleEntryFragment extends EntryFragment {
 
-    static class Triple {
+    public static class Triple {
 
         final ABIType<Object> abiType;
         final Object object;

@@ -75,31 +75,32 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
         ArrayEntryAdapter.setEditTextAttributes(holder.typeableValue, triple.abiType);
 
-        if(canonical.startsWith("(") && canonical.endsWith(")")) {
+        final View.OnClickListener startSubtuple = v -> {
+            final int adapterPos = holder.getBindingAdapterPosition();
+            if (adapterPos == RecyclerView.NO_POSITION) return;
+            elementUnderEditPosition = adapterPos;
+            EditorActivity.startSubtupleActivity(activity, canonical, false);
+        };
+        final View.OnClickListener startArray = v -> {
+            final int adapterPos = holder.getBindingAdapterPosition();
+            if (adapterPos == RecyclerView.NO_POSITION) return;
+            elementUnderEditPosition = adapterPos;
+            EditorActivity.startArrayActivity(activity, canonical, false);
+        };
 
-            if (validate(triple, holder.editableValue)) {
-                list.set(position, triple);
-            }
+        if (canonical.startsWith("(") && canonical.endsWith(")")) {
+            validate(triple, holder.editableValue);
             if(canonical.equals("()")) {
-                list.set(holder.getBindingAdapterPosition(), new Triple(triple.abiType, Tuple.EMPTY));
+                list.set(position, new Triple(triple.abiType, Tuple.EMPTY));
                 holder.editableValue.setBackgroundColor(colorGreen);
             } else {
-                holder.editableValue.setOnClickListener(v -> {
-                    elementUnderEditPosition = holder.getBindingAdapterPosition();
-                    EditorActivity.startSubtupleActivity(activity, canonical, false);
-                });
+                holder.editableValue.setOnClickListener(startSubtuple);
             }
             holder.typeableValue.setVisibility(View.INVISIBLE);
             holder.editableValue.setVisibility(View.VISIBLE);
         } else if (canonical.endsWith("]")) {
-
-            holder.editableValue.setOnClickListener(v -> {
-                elementUnderEditPosition = holder.getBindingAdapterPosition();
-                EditorActivity.startArrayActivity(activity, canonical, false);
-            });
-            if (validate(triple, holder.editableValue)) {
-                list.set(position, triple);
-            }
+            holder.editableValue.setOnClickListener(startArray);
+            validate(triple, holder.editableValue);
             holder.typeableValue.setVisibility(View.INVISIBLE);
             holder.editableValue.setVisibility(View.VISIBLE);
         } else {
@@ -114,19 +115,10 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
             case ABIType.TYPE_CODE_BIG_DECIMAL: holder.typeableValue.setInputType(InputType.TYPE_CLASS_NUMBER); break;
             default: holder.typeableValue.setInputType(InputType.TYPE_CLASS_TEXT);
             }
-//            if(code != ABIType.TYPE_CODE_BOOLEAN
-//                    && code != ABIType.TYPE_CODE_ARRAY
-//                    && code != ABIType.TYPE_CODE_TUPLE) {
-//                holder.typeableValue.setInputType(InputType.TYPE_CLASS_NUMBER);
-//            } else {
-//                holder.typeableValue.setInputType(InputType.TYPE_CLASS_TEXT);
-//            }
 
             holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
                 if(hasFocus) {
-                    if (validate(triple, holder.typeableValue)) {
-                        list.set(position, triple);
-                    }
+                    validate(triple, holder.typeableValue);
                 }
             });
 
@@ -150,9 +142,12 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
                 @Override
                 public void afterTextChanged(Editable s) {
 
+                    final int adapterPos = holder.getBindingAdapterPosition();
+                    if (adapterPos == RecyclerView.NO_POSITION) return;
+
                     final String argString = s.toString();
 
-                    Triple newTriple = list.get(holder.getBindingAdapterPosition());
+                    Triple newTriple = list.get(adapterPos);
 
                     Object obj;
                     final boolean isArray = newTriple.abiType.typeCode() == ABIType.TYPE_CODE_ARRAY;
@@ -176,7 +171,7 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
                     Triple newNewTriple = new Triple(newTriple.abiType, obj);
 
-                    list.set(holder.getBindingAdapterPosition(), newNewTriple);
+                    list.set(adapterPos, newNewTriple);
 
                     validate(newNewTriple, holder.typeableValue);
                 }
