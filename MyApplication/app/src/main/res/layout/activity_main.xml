@@ -26,6 +26,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <Button
+                android:id="@+id/settings"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Settings"/>
+
             <TextView
                 android:id="@+id/output"
                 android:layout_width="match_parent"

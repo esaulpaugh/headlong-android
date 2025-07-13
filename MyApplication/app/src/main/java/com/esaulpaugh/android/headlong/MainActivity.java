@@ -16,8 +16,10 @@ limitations under the License.
 package com.esaulpaugh.android.headlong;
 
 import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
+import static com.esaulpaugh.headlong.abi.UnitType.UNIT_LENGTH_BYTES;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -37,8 +39,8 @@ import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.Function;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TupleType;
+import com.esaulpaugh.headlong.util.Strings;
 
-import java.nio.ByteBuffer;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
@@ -48,6 +50,15 @@ public class MainActivity extends Activity {
 
     private TupleEntryFragment tupleEntryFragment;
     private TextView output;
+
+    private static final int OUTPUT_RAW = 0;
+    private static final int OUTPUT_FORMATTED = 1;
+    private static final int OUTPUT_ANNOTATED = 2;
+    private static final int LABEL_LINE_NUMBERS = 0;
+    private static final int LABEL_BYTE_OFFSETS = 1;
+
+    private int outputFormat = OUTPUT_ANNOTATED;
+    private int lineLabel = LABEL_BYTE_OFFSETS;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -61,6 +72,7 @@ public class MainActivity extends Activity {
         setTitle("headlong demo");
 
         output = (TextView) findViewById(R.id.output);
+        Button settings = (Button) findViewById(R.id.settings);
         Button gogo = (Button) findViewById(R.id.gogo);
 
         tupleEntryFragment = TupleEntryFragment.newInstance();
@@ -69,6 +81,27 @@ public class MainActivity extends Activity {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frag_frame, tupleEntryFragment);
         fragmentTransaction.commit();
+
+        settings.setOnClickListener(v -> {
+            final String[] formats = { "Raw Hex", "Formatted", "Annotated" };
+            final String[] lineLabels = { "Line Numbers", "Byte Offsets" };
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Output Format")
+                    .setSingleChoiceItems(formats, outputFormat, (d, whichFormat) -> outputFormat = whichFormat)
+                    .setPositiveButton("OK", (d, ignored) -> {
+                        if (outputFormat == OUTPUT_FORMATTED) {
+                            new AlertDialog.Builder(MainActivity.this)
+                                    .setTitle("Line Labels")
+                                    .setSingleChoiceItems(lineLabels, lineLabel, (dd, whichLabel) -> lineLabel = whichLabel)
+                                    .setPositiveButton("OK", null)
+                                    .setNegativeButton("Cancel", null)
+                                    .show();
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
 
         gogo.setOnClickListener(v -> {
             final String signature = tupleEntryFragment.getFunctionSignature();
@@ -91,17 +124,44 @@ public class MainActivity extends Activity {
         try {
             Function f = new Function(signature);
 
-            ByteBuffer bb = f.encodeCall(masterTuple);
+            final byte[] call = f.encodeCall(masterTuple).array();
+            final String outputStr;
+            switch (outputFormat) {
+                case OUTPUT_RAW: outputStr = Strings.encode(call); break;
+                case OUTPUT_FORMATTED:
+                    outputStr = lineLabel == LABEL_LINE_NUMBERS
+                                    ? Function.formatCall(call, (int row) -> padLabel(0, Integer.toString(row)))
+                                    : Function.formatCall(call, MainActivity::hexLabel);
+                    break;
+                case OUTPUT_ANNOTATED: outputStr = f.annotateCall(call); break;
+                default: return;
+            }
 
-            byte[] arr = bb.array();
-            String formatted = f.annotateCall(arr);
-
-            output.setText(formatted);
+            output.setText(outputStr);
 
         } catch (RuntimeException re) {
             output.setText(re.getMessage());
             Toast.makeText(MainActivity.this, re.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private static String hexLabel(int row) {
+        String hexLabel = Integer.toHexString(row * UNIT_LENGTH_BYTES);
+        return padLabel(6 - hexLabel.length(), hexLabel);
+    }
+
+    private static String padLabel(int leftPadding, String unpadded) {
+        final int paddedLabelLen = 9;
+        StringBuilder padded = new StringBuilder(paddedLabelLen);
+        int i;
+        for (i = 0; i < leftPadding; i++) {
+            padded.append(' ');
+        }
+        padded.append(unpadded);
+        for (i += unpadded.length(); i < paddedLabelLen; i++) {
+            padded.append(' ');
+        }
+        return padded.toString();
     }
 
     @Override
