@@ -10,7 +10,9 @@
         android:layout_height="40dp"
         android:textSize="16sp"
         android:hint="Function signature"
-        android:textColor="#000000"
+        android:paddingLeft="6dp"
+        android:background="#c0c0c0"
+        android:textColor="#222222"
         android:textColorHint="#404040"
         android:singleLine="true"
         android:inputType="textNoSuggestions|textVisiblePassword" />
@@ -19,8 +21,11 @@
         android:id="@+id/tuple_type_string"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="6dp"
         android:textSize="16sp"
-        android:textColor="#000000"/>
+        android:background="#707070"
+        android:textColor="#ffffff"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

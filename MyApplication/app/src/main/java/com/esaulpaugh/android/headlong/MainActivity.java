@@ -18,7 +18,6 @@ package com.esaulpaugh.android.headlong;
 import static com.esaulpaugh.android.headlong.ArrayEntryFragment.parseArrayType;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.Intent;
