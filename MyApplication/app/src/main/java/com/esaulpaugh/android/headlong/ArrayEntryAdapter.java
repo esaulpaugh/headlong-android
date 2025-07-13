@@ -102,26 +102,31 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
         holder.type.setText(String.valueOf(position));
 
+        final View.OnClickListener startSubtuple = v -> {
+            final int adapterPos = holder.getBindingAdapterPosition();
+            if (adapterPos == RecyclerView.NO_POSITION) return;
+            elementUnderEditPosition = adapterPos;
+            EditorActivity.startSubtupleActivity(activity, elementCanonicalTypeString, false);
+        };
+        final View.OnClickListener startArray = v -> {
+            final int adapterPos = holder.getBindingAdapterPosition();
+            if (adapterPos == RecyclerView.NO_POSITION) return;
+            elementUnderEditPosition = adapterPos;
+            EditorActivity.startArrayActivity(activity, elementCanonicalTypeString, false);
+        };
+
         switch (elementCategory) {
         case ArrayEntryFragment.CATEGORY_TUPLE:
             if(elementCanonicalTypeString.equals("()")) {
-                list.set(holder.getBindingAdapterPosition(), Tuple.EMPTY);
+                list.set(position, Tuple.EMPTY);
             } else {
-                holder.editableValue.setOnClickListener(v -> {
-                    elementUnderEditPosition = holder.getBindingAdapterPosition();
-                    EditorActivity.startSubtupleActivity(activity, elementCanonicalTypeString, false);
-                });
+                holder.editableValue.setOnClickListener(startSubtuple);
             }
-
             holder.typeableValue.setVisibility(View.INVISIBLE);
             holder.editableValue.setVisibility(View.VISIBLE);
             break;
         case ArrayEntryFragment.CATEGORY_ARRAY:
-            holder.editableValue.setOnClickListener(v -> {
-                elementUnderEditPosition = holder.getBindingAdapterPosition();
-                EditorActivity.startArrayActivity(activity, elementCanonicalTypeString, false);
-            });
-
+            holder.editableValue.setOnClickListener(startArray);
             holder.typeableValue.setVisibility(View.INVISIBLE);
             holder.editableValue.setVisibility(View.VISIBLE);
             break;
@@ -130,7 +135,9 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
             holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
                 if(hasFocus) {
-                    validateTypeable((String) list.get(position), holder.typeableValue, true);
+                    final int adapterPos = holder.getBindingAdapterPosition();
+                    if (adapterPos == RecyclerView.NO_POSITION) return;
+                    validateTypeable((String) list.get(adapterPos), holder.typeableValue, true);
                 }
             });
 
@@ -152,7 +159,10 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
 
                     validateTypeable(argString, holder.typeableValue, false);
 
-                    list.set(holder.getBindingAdapterPosition(), argString);
+                    final int adapterPos = holder.getBindingAdapterPosition();
+                    if (adapterPos == RecyclerView.NO_POSITION) return;
+
+                    list.set(adapterPos, argString);
                 }
             };
             holder.typeableValue.addTextChangedListener(holder.textWatcher);
