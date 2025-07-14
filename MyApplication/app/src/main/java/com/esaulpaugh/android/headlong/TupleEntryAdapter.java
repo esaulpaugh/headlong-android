@@ -116,11 +116,14 @@ public class TupleEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
             default: holder.typeableValue.setInputType(InputType.TYPE_CLASS_TEXT);
             }
 
-            holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
-                if(hasFocus) {
-                    validate(triple, holder.typeableValue);
-                }
-            });
+//            holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
+//                if (hasFocus) {
+//                    final int adapterPos = holder.getBindingAdapterPosition();
+//                    if (adapterPos == RecyclerView.NO_POSITION) return;
+//                    Triple tt = list.get(adapterPos);
+//                    validate(tt, holder.typeableValue);
+//                }
+//            });
 
             holder.typeableValue.removeTextChangedListener(holder.textWatcher);
 

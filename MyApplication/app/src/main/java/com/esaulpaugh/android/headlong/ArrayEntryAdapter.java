@@ -133,13 +133,13 @@ public class ArrayEntryAdapter extends RecyclerView.Adapter<TupleEntryAdapter.Vi
         case ArrayEntryFragment.CATEGORY_TYPEABLE:
             holder.typeableValue.removeTextChangedListener(holder.textWatcher);
 
-            holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
-                if(hasFocus) {
-                    final int adapterPos = holder.getBindingAdapterPosition();
-                    if (adapterPos == RecyclerView.NO_POSITION) return;
-                    validateTypeable((String) list.get(adapterPos), holder.typeableValue, true);
-                }
-            });
+//            holder.typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
+//                if(hasFocus) {
+//                    final int adapterPos = holder.getBindingAdapterPosition();
+//                    if (adapterPos == RecyclerView.NO_POSITION) return;
+//                    validateTypeable((String) list.get(adapterPos), holder.typeableValue, true);
+//                }
+//            });
 
             holder.textWatcher = new TextWatcher() {
                 @Override

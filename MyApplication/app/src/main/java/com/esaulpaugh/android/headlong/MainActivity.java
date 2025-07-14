@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
         fragmentTransaction.commit();
 
         settings.setOnClickListener(v -> {
-            final String[] formats = { "Raw Hex", "Formatted", "Annotated" };
+            final String[] formats = { "Raw", "Formatted", "Annotated" };
             final String[] lineLabels = { "Line Numbers", "Byte Offsets" };
 
             new AlertDialog.Builder(MainActivity.this)
@@ -95,11 +95,9 @@ public class MainActivity extends Activity {
                                     .setTitle("Line Labels")
                                     .setSingleChoiceItems(lineLabels, lineLabel, (dd, whichLabel) -> lineLabel = whichLabel)
                                     .setPositiveButton("OK", null)
-                                    .setNegativeButton("Cancel", null)
                                     .show();
                         }
                     })
-                    .setNegativeButton("Cancel", null)
                     .show();
         });
 
