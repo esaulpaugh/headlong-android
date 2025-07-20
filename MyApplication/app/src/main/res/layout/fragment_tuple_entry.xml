@@ -40,7 +40,7 @@
         android:id="@+id/return_tuple"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@android:color/holo_green_dark"
+        android:background="@drawable/button_green_select"
         android:text="ENTER"
         android:textColor="@android:color/white" />
 </LinearLayout>

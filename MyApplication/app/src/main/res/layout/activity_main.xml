@@ -54,7 +54,7 @@
         android:id="@+id/gogo"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@android:color/holo_blue_bright"
+        android:background="@drawable/button_blue_select"
         android:text="Gogo"
         android:textColor="@android:color/white"
         android:layout_alignParentBottom="true" />
