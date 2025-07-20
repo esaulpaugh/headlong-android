@@ -286,17 +286,13 @@ public class ArrayEntryFragment extends EntryFragment {
         return TypeFactory.create(typeStr);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setAllToDefault() {
         System.out.println("setAllToDefault()");
         listElements.clear();
-        if (elementCategory == CATEGORY_TYPEABLE) {
-            for (int i = 0; i < length; i++) {
-                listElements.add(defaultValString);
-            }
-        } else {
-            for (int i = 0; i < length; i++) {
-                listElements.add(defaultVal);
-            }
+        final Object val = elementCategory == CATEGORY_TYPEABLE ? defaultValString : defaultVal;
+        for (int i = 0; i < length; i++) {
+            listElements.add(val);
         }
         adapter.notifyDataSetChanged();
     }
