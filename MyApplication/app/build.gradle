@@ -8,7 +8,7 @@ android {
     }
     defaultConfig {
         applicationId "com.esaulpaugh.android.headlong"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 36
         versionCode 1
         versionName "1.0"
