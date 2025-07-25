@@ -17,7 +17,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     packagingOptions {
@@ -37,4 +37,34 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
 //    androidTestImplementation 'com.android.test:runner:1.4.0'
 //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.4.0'
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+//    if (System.getenv("SOURCE_DATE_EPOCH") != null) {
+//        def epoch = System.getenv("SOURCE_DATE_EPOCH").toLong() * 1000
+//        inputs.property("timestamp", epoch)
+//    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ["-Xlint:none"]
+    options.compilerArgs += ["-parameters"]
+}
+
+tasks.withType(Jar).configureEach {
+    manifest {
+        attributes("Built-By" : "Gradle")
+    }
+}
+
+if (System.getenv("SOURCE_DATE_EPOCH") != null) {
+    allprojects {
+        tasks.withType(AbstractArchiveTask).configureEach {
+            metadataCharset = "UTF-8"
+//            dirMode = 0755
+//            fileMode = 0644
+        }
+    }
 }
