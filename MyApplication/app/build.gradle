@@ -17,13 +17,13 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            shrinkResources false
+            shrinkResources true
 
             postprocessing {
-                removeUnusedResources false
+                removeUnusedResources true
                 optimizeCode false
                 obfuscate false
-                removeUnusedCode false
+                removeUnusedCode true
             }
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
