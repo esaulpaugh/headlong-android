@@ -27,14 +27,21 @@
         android:background="#707070"
         android:textColor="#ffffff"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:minHeight="4dp"
         android:scrollbars="vertical"
-        android:background="@android:color/holo_red_light" />
+        android:background="@android:color/holo_red_light">
+
+        <LinearLayout
+            android:id="@+id/list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:minHeight="4dp" />
+    </ScrollView>
 
     <Button
         android:id="@+id/return_tuple"

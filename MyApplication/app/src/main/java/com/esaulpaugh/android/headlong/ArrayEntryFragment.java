@@ -21,16 +21,16 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.esaulpaugh.headlong.abi.ABIType;
 import com.esaulpaugh.headlong.abi.Address;
@@ -38,6 +38,7 @@ import com.esaulpaugh.headlong.abi.ArrayType;
 import com.esaulpaugh.headlong.abi.BigDecimalType;
 import com.esaulpaugh.headlong.abi.Tuple;
 import com.esaulpaugh.headlong.abi.TypeFactory;
+import com.esaulpaugh.headlong.abi.UnitType;
 import com.esaulpaugh.headlong.util.Strings;
 
 import java.lang.reflect.Array;
@@ -48,16 +49,20 @@ import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class ArrayEntryFragment extends EntryFragment {
+    private static final String TAG = ArrayEntryFragment.class.getSimpleName();
 
     private static final String ARG_FOR_DEFAULT_VAL = "for_default_val";
     static final String ARG_ARRAY_TYPE_STRING = "array_type_string";
 
+    private int colorRed;
+    private int colorGreen;
+    private int elementUnderEditPosition = -1;
     private boolean forDefaultVal;
     private String arrayTypeString;
 
     private ABIType<Object> elementType;
-
-    private List<Object> listElements;
+    private LinearLayout listLayout;
+    private List<Object> list;
 
     private int length;
     private Object defaultVal;
@@ -67,7 +72,7 @@ public class ArrayEntryFragment extends EntryFragment {
 
     private int elementCategory;
 
-    private ArrayEntryAdapter adapter;
+//    private ArrayEntryAdapter adapter;
 
     private View defaultValView;
 
@@ -107,16 +112,20 @@ public class ArrayEntryFragment extends EntryFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_array_entry, container, false);
 
+        colorRed = getActivity().getResources().getColor(R.color.colorAccent);
+        colorGreen = getActivity().getResources().getColor(R.color.colorPrimary);
+
         final ArrayType<ABIType<?>, ?, ?> arrayType;
         try {
             arrayType = (ArrayType<ABIType<?>, ?, ?>) TypeFactory.create(arrayTypeString);
         } catch (IllegalArgumentException iae) {
+            Log.d(TAG, iae.getMessage());
             Toast.makeText(getActivity(), iae.getMessage(), Toast.LENGTH_LONG).show();
             return view;
         }
 
         elementType = (ABIType<Object>) arrayType.getElementType();
-        listElements = new ArrayList<>();
+        list = new ArrayList<>();
 
         final String elementCanonical = elementType.getCanonicalType();
 
@@ -174,7 +183,7 @@ public class ArrayEntryFragment extends EntryFragment {
         if (elementCategory == CATEGORY_TYPEABLE) {
             invisibleView = view.findViewById(R.id.edit_button);
             defaultValView = view.findViewById(R.id.typeable_value);
-            ArrayEntryAdapter.setEditTextAttributes((EditText) defaultValView, elementType);
+            setEditTextAttributes((EditText) defaultValView, elementType);
 
             setHint((EditText) defaultValView, elementType);
         } else {
@@ -185,10 +194,13 @@ public class ArrayEntryFragment extends EntryFragment {
         invisibleView.setVisibility(View.INVISIBLE);
         defaultValView.setVisibility(View.VISIBLE);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.array_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ArrayEntryAdapter(getActivity(), elementType, elementCategory, listElements);
-        recyclerView.setAdapter(adapter);
+//        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.array_recycler_view);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        adapter = new ArrayEntryAdapter(getActivity(), elementType, elementCategory, list);
+//        recyclerView.setAdapter(adapter);
+
+        ScrollView scrollView = (ScrollView) view.findViewById(R.id.scroll_view_for_array);
+        listLayout = (LinearLayout) view.findViewById(R.id.list_layout_for_array);
 
         type.setText("Set all, " + elementCanonical + ", " + MainActivity.friendlyClassName(elementType));
 
@@ -275,6 +287,7 @@ public class ArrayEntryFragment extends EntryFragment {
                 getActivity().finish();
 
             } catch (Exception e) {
+                Log.d(TAG, e.getClass().getSimpleName() + " " + e.getMessage());
                 Toast.makeText(getActivity(), e.getClass().getSimpleName() + " " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -287,14 +300,23 @@ public class ArrayEntryFragment extends EntryFragment {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void setAllToDefault() {
+    private void setAllToDefault() { //
         System.out.println("setAllToDefault()");
-        listElements.clear();
+        list.clear();
+        listLayout.removeAllViews();
         final Object val = elementCategory == CATEGORY_TYPEABLE ? defaultValString : defaultVal;
+        final LayoutInflater inflater = LayoutInflater.from(getActivity());
+        int position = 0;
         for (int i = 0; i < length; i++) {
-            listElements.add(val);
+            list.add(val);
+
+            View itemView = inflater.inflate(R.layout.argument_row, listLayout, false);
+
+            bind(itemView, position++);
+
+            listLayout.addView(itemView);
         }
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -303,13 +325,23 @@ public class ArrayEntryFragment extends EntryFragment {
             defaultValView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             defaultVal = obj;
             setAllToDefault();
-        } else {
-            try {
-                adapter.returnEditedObject(obj);
-            } catch (NullPointerException npe) {
-                Toast.makeText(getActivity(), npe.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        if (elementUnderEditPosition >= 0) {
+            list.set(elementUnderEditPosition, obj);
+            View child = listLayout.getChildAt(elementUnderEditPosition);
+            if (elementCategory == ArrayEntryFragment.CATEGORY_TYPEABLE) {
+                validateTypeable((String) obj, child.findViewById(R.id.typeable_value), true);
+            } else {
+                validateEditable(obj, child.findViewById(R.id.edit_button));
             }
         }
+//        else {
+//            try {
+//                adapter.returnEditedObject(obj);
+//            } catch (NullPointerException npe) {
+//                Toast.makeText(getActivity(), npe.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        }
     }
 
     private Object createArray(ArrayType<?, ?, ?> arrayType, int length) {
@@ -318,7 +350,7 @@ public class ArrayEntryFragment extends EntryFragment {
         case "java.lang.Byte":
         case "B": {
             byte[] arr = new byte[length];
-            for (Object e : listElements) {
+            for (Object e : list) {
                 arr[i++] = Byte.parseByte((String) e);
             }
             return arr;
@@ -326,7 +358,7 @@ public class ArrayEntryFragment extends EntryFragment {
         case "java.lang.Short":
         case "S": {
             short[] arr = new short[length];
-            for (Object e : listElements) {
+            for (Object e : list) {
                 arr[i++] = Short.parseShort((String) e);
             }
             return arr;
@@ -334,7 +366,7 @@ public class ArrayEntryFragment extends EntryFragment {
         case "java.lang.Integer":
         case "I": {
             int[] arr = new int[length];
-            for (Object e : listElements) {
+            for (Object e : list) {
                 Integer val = Integer.parseInt((String) e);
                 elementType.validate(val);
                 arr[i++] = val;
@@ -344,7 +376,7 @@ public class ArrayEntryFragment extends EntryFragment {
         case "java.lang.Long":
         case "J": {
             long[] arr = new long[length];
-            for (Object e : listElements) {
+            for (Object e : list) {
                 Long val = Long.parseLong((String) e);
                 elementType.validate(val);
                 arr[i++] = val;
@@ -354,7 +386,7 @@ public class ArrayEntryFragment extends EntryFragment {
         case "java.lang.Float":
         case "F": {
             float[] arr = new float[length];
-            for (Object e : listElements) {
+            for (Object e : list) {
                 Float f = Float.parseFloat((String) e);
                 elementType.validate(f);
                 arr[i++] = f;
@@ -364,7 +396,7 @@ public class ArrayEntryFragment extends EntryFragment {
         case "java.lang.Double":
         case "D": {
             double[] arr = new double[length];
-            for (Object e : listElements) {
+            for (Object e : list) {
                 Double d = Double.parseDouble((String) e);
                 elementType.validate(d);
                 arr[i++] = d;
@@ -374,7 +406,7 @@ public class ArrayEntryFragment extends EntryFragment {
         case "java.lang.Character":
         case "C": {
             char[] arr = new char[length];
-            for (Object e : listElements) {
+            for (Object e : list) {
                 Character c = ((String) e).charAt(0);
                 elementType.validate(c);
                 arr[i++] = c;
@@ -384,7 +416,7 @@ public class ArrayEntryFragment extends EntryFragment {
         case "java.lang.Boolean":
         case "Z": {
             boolean[] arr = new boolean[length];
-            for (Object e : listElements) {
+            for (Object e : list) {
                 arr[i++] = Boolean.parseBoolean((String) e);
             }
             return arr;
@@ -407,11 +439,11 @@ public class ArrayEntryFragment extends EntryFragment {
         if(elementCategory == CATEGORY_TYPEABLE) {
             final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
             final boolean isString = isArray && ((ArrayType<?, ?, ?>) elementType).isString();
-            for (Object e : listElements) {
+            for (Object e : list) {
                 array[i++] = parseElement(elementType, (String) e, isString, isArray);
             }
         } else {
-            for (Object e : listElements) {
+            for (Object e : list) {
                 array[i++] = e;
             }
         }
@@ -442,5 +474,159 @@ public class ArrayEntryFragment extends EntryFragment {
         }
         ((ABIType<Object>) elementType).validate(x);
         return x;
+    }
+
+    public void bind(View rowView, int position) {
+        TextView type = (TextView) rowView.findViewById(R.id.type);
+        EditText typeableValue = (EditText) rowView.findViewById(R.id.typeable_value);
+        View editableValue = rowView.findViewById(R.id.edit_button);
+
+        setEditTextAttributes(typeableValue, elementType);
+
+        final Object element = list.get(position);
+
+        type.setText(String.valueOf(position));
+
+        final View.OnClickListener startSubtuple = v -> {
+//            final int adapterPos = getBindingAdapterPosition();
+//            if (adapterPos == RecyclerView.NO_POSITION) return;
+            elementUnderEditPosition = position;
+            EditorActivity.startSubtupleActivity(getActivity(), elementType.getCanonicalType(), false);
+        };
+        final View.OnClickListener startArray = v -> {
+//            final int adapterPos = getBindingAdapterPosition();
+//            if (adapterPos == RecyclerView.NO_POSITION) return;
+            elementUnderEditPosition = position;
+            EditorActivity.startArrayActivity(getActivity(), elementType.getCanonicalType(), false);
+        };
+
+        switch (elementCategory) {
+            case ArrayEntryFragment.CATEGORY_TUPLE:
+                if(elementType.getCanonicalType().equals("()")) {
+                    list.set(position, Tuple.EMPTY);
+                } else {
+                    editableValue.setOnClickListener(startSubtuple);
+                }
+                typeableValue.setVisibility(View.INVISIBLE);
+                editableValue.setVisibility(View.VISIBLE);
+                break;
+            case ArrayEntryFragment.CATEGORY_ARRAY:
+                editableValue.setOnClickListener(startArray);
+                typeableValue.setVisibility(View.INVISIBLE);
+                editableValue.setVisibility(View.VISIBLE);
+                break;
+            case ArrayEntryFragment.CATEGORY_TYPEABLE:
+//                typeableValue.removeTextChangedListener(textWatcher);
+
+//            typeableValue.setOnFocusChangeListener((v, hasFocus) -> {
+//                if(hasFocus) {
+//                    final int adapterPos = getBindingAdapterPosition();
+//                    if (adapterPos == RecyclerView.NO_POSITION) return;
+//                    validateTypeable((String) list.get(adapterPos), typeableValue, true);
+//                }
+//            });
+
+                TextWatcher textWatcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                        final String argString = s.toString();
+
+                        validateTypeable(argString, typeableValue, false);
+
+//                        final int adapterPos = getBindingAdapterPosition();
+//                        if (adapterPos == RecyclerView.NO_POSITION) return;
+
+                        list.set(position, argString);
+                    }
+                };
+                typeableValue.addTextChangedListener(textWatcher);
+
+                editableValue.setVisibility(View.INVISIBLE);
+                typeableValue.setVisibility(View.VISIBLE);
+
+                setHint(typeableValue, elementType);
+                break;
+            default:
+                throw new Error();
+        }
+
+        if(elementCategory == ArrayEntryFragment.CATEGORY_TYPEABLE) {
+            validateTypeable((String) element, typeableValue, true);
+        } else {
+            validateEditable(element, editableValue);
+        }
+    }
+
+    static void setEditTextAttributes(EditText editText, ABIType<?> elementType) {
+        int inputType = InputType.TYPE_CLASS_NUMBER;
+        switch (elementType.typeCode()) {
+            case ABIType.TYPE_CODE_BYTE:
+            case ABIType.TYPE_CODE_INT:
+            case ABIType.TYPE_CODE_LONG:
+            case ABIType.TYPE_CODE_BIG_INTEGER: {
+                if (!((UnitType<?>) elementType).isUnsigned()) {
+                    inputType |= InputType.TYPE_NUMBER_FLAG_SIGNED;
+                }
+                break;
+            }
+            case ABIType.TYPE_CODE_BIG_DECIMAL: {
+                inputType |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
+                if (!((UnitType<?>) elementType).isUnsigned()) {
+                    inputType |= InputType.TYPE_NUMBER_FLAG_SIGNED;
+                }
+                break;
+            }
+            default:
+                inputType = InputType.TYPE_CLASS_TEXT;
+        }
+        editText.setInputType(inputType);
+    }
+
+    private void validateTypeable(String valString, EditText typeableValueView, boolean setText) {
+        boolean valid = valString != null;
+        if(valid) {
+            try {
+                final boolean isArray = elementType.typeCode() == ABIType.TYPE_CODE_ARRAY;
+                final boolean isString = isArray && ((ArrayType<?, ?, ?>) elementType).isString();
+                Object val = ArrayEntryFragment.parseElement(elementType, valString, isString, isArray);
+                elementType.validate(val);
+                if(setText) {
+                    typeableValueView.setText(valString);
+                }
+            } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException iae) {
+                valid = false;
+            }
+        }
+
+        System.out.println("validateTypeable(" + setText + ") = " + valid);
+
+        typeableValueView.setBackgroundColor(valid ? colorGreen : colorRed);
+    }
+
+    private void validateEditable(Object val, View editableValueView) {
+
+        boolean valid = val != null;
+        if(valid) {
+            try {
+                elementType.validate(val);
+            } catch (IllegalArgumentException iae) {
+                valid = false;
+            }
+        }
+
+        System.out.println("validate() = " + valid);
+
+        editableValueView.setBackgroundColor(valid ? colorGreen : colorRed);
     }
 }

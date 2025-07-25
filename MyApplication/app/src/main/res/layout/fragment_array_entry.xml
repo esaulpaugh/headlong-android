@@ -48,15 +48,23 @@
         android:layout_height="50dp"
         android:layout_width="match_parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/array_recycler_view"
-        android:layout_below="@id/default_element"
-        android:layout_above="@id/return_array"
-        android:background="@android:color/holo_red_light"
+    <ScrollView
+        android:id="@+id/scroll_view_for_array"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/default_element"
+        android:layout_above="@id/return_array"
         android:minHeight="20dp"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:background="@android:color/holo_red_light">
+
+        <LinearLayout
+            android:id="@+id/list_layout_for_array"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:minHeight="4dp" />
+    </ScrollView>
 
     <Button
         android:id="@+id/return_array"
