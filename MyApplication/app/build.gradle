@@ -39,9 +39,6 @@ android {
 }
 
 dependencies {
-
-//    implementation files('libs/headlong-3.7.0.jar')
-
     implementation 'com.esaulpaugh:headlong:13.3.1'
 //    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 //    androidTestImplementation 'com.android.test:runner:1.4.0'
@@ -51,21 +48,11 @@ dependencies {
 tasks.withType(AbstractArchiveTask).configureEach {
     preserveFileTimestamps = false
     reproducibleFileOrder = true
-//    if (System.getenv("SOURCE_DATE_EPOCH") != null) {
-//        def epoch = System.getenv("SOURCE_DATE_EPOCH").toLong() * 1000
-//        inputs.property("timestamp", epoch)
-//    }
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ["-Xlint:none"]
     options.compilerArgs += ["-parameters"]
-}
-
-tasks.withType(Jar).configureEach {
-    manifest {
-        attributes("Built-By" : "Gradle")
-    }
 }
 
 if (System.getenv("SOURCE_DATE_EPOCH") != null) {
